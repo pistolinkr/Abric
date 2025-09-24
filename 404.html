@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - Abric</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="logo/light.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="logo/light.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="logo/light.png">
+    <link rel="shortcut icon" href="logo/light.png">
+    <meta name="theme-color" content="#121212">
+    <link rel="stylesheet" href="404.css">
+    <link href="https://fonts.googleapis.com/css2?family=Abel:wght@400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="error-container">
+        <!-- Logo Section -->
+        <a href="main/" class="logo-section">
+            <img src="logo/light.png" alt="Abric Logo" class="logo">
+            <h1 class="logo-text">Abric</h1>
+        </a>
+
+        <!-- Error Content -->
+        <div class="error-content">
+            <div class="error-number">404</div>
+            <h2 class="error-title">Page Not Found</h2>
+            <p class="error-description">
+                The page you're looking for doesn't exist or has been moved.
+            </p>
+            
+            <div class="error-actions">
+                <button class="btn btn-primary" onclick="window.location.href='main/'">
+                    Go to Home
+                </button>
+                <button class="btn btn-secondary" onclick="history.back()">
+                    Go Back
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="help-links">
+            <a href="main/" class="help-link">Home</a>
+            <a href="contact/" class="help-link">Contact</a>
+            <a href="auth/signin.html" class="help-link">Sign In</a>
+        </div>
+
+        <!-- Footer -->
+        <footer class="error-footer">
+            <p>&copy; 2024 Abric. All rights reserved.</p>
+        </footer>
+    </div>
+
+
+    <script type="module">
+        import { authUtils } from './auth/auth-utils.js';
+
+        // Update navigation based on auth state
+        authUtils.onAuthStateChange((user) => {
+            const signInLink = document.querySelector('.help-link[href="auth/signin.html"]');
+            if (user && signInLink) {
+                signInLink.textContent = 'Dashboard';
+                signInLink.href = 'dashboard/';
+            } else if (!user && signInLink) {
+                signInLink.textContent = 'Sign In';
+                signInLink.href = 'auth/signin.html';
+            }
+        });
+    </script>
+</body>
+</html>

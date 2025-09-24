@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery Booth - Abric</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Abel:wght@400&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../logo/light.png">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <a href="../main/" class="logo-section">
+                    <img src="../logo/light.png" alt="Abric Logo" class="logo">
+                    <span class="logo-text">Abric</span>
+                </a>
+                
+                <div class="user-section">
+                    <div class="user-info">
+                        <span class="user-name" id="userName">Welcome back!</span>
+                        <span class="user-email" id="userEmail"></span>
+                    </div>
+                    <button class="logout-button" id="logoutButton">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                            <polyline points="16,17 21,12 16,7"/>
+                            <line x1="21" y1="12" x2="9" y2="12"/>
+                        </svg>
+                        Sign Out
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Gallery Canvas -->
+        <main class="gallery-main">
+            <div class="gallery-canvas" id="galleryCanvas">
+                <!-- Gallery items will be generated here -->
+            </div>
+        </main>
+
+        <!-- Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-content">
+                <a href="#" class="nav-item active">
+                    <div class="nav-icon">🏠</div>
+                    <span>Home</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <div class="nav-icon">🔍</div>
+                    <span>Search</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <div class="nav-icon">⭐</div>
+                    <span>Favorites</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <div class="nav-icon">👤</div>
+                    <span>Profile</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+
+    <!-- Gallery Booth SDK -->
+    <script type="module">
+        import { authUtils } from '../auth/auth-utils.js';
+        import { GalleryBoothManager } from './GalleryBooth.js';
+
+        // DOM elements
+        const userNameElement = document.getElementById('userName');
+        const userEmailElement = document.getElementById('userEmail');
+        const logoutButton = document.getElementById('logoutButton');
+        const galleryCanvas = document.getElementById('galleryCanvas');
+
+        // Initialize Gallery Booth Manager
+        const galleryManager = new GalleryBoothManager();
+
+        // Auth check
+        let authCheckDone = false;
+        
+        const checkAuthAndLoad = () => {
+            if (authCheckDone) return;
+            
+            const user = authUtils.checkAuthState();
+            if (user) {
+                console.log('User authenticated, loading Gallery Booth');
+                authCheckDone = true;
+                loadUserData();
+                initializeGallery();
+                return;
+            }
+            
+            if (user === null) {
+                setTimeout(checkAuthAndLoad, 100);
+            } else {
+                console.log('User not authenticated, redirecting to 404 page');
+                authCheckDone = true;
+                window.location.href = '../404.html';
+            }
+        };
+        
+        setTimeout(checkAuthAndLoad, 200);
+        
+        setTimeout(() => {
+            if (!authCheckDone) {
+                console.log('Auth check timeout, redirecting to 404 page');
+                authCheckDone = true;
+                window.location.href = '../404.html';
+            }
+        }, 3000);
+
+        // Load user data
+        function loadUserData() {
+            const user = authUtils.getCurrentUser();
+            if (user) {
+                const displayName = authUtils.getUserDisplayName();
+                const email = authUtils.getUserEmail();
+                
+                userNameElement.textContent = `Welcome, ${displayName}!`;
+                userEmailElement.textContent = email;
+            }
+        }
+
+        // Initialize Gallery with SimpleCursorCanvasOverride functionality
+        async function initializeGallery() {
+            if (galleryCanvas) {
+                await galleryManager.initialize(galleryCanvas);
+            }
+        }
+
+        // Logout functionality
+        logoutButton.addEventListener('click', async () => {
+            const result = await authUtils.signOut();
+            if (result.success) {
+                window.location.href = '../auth/signin.html';
+            } else {
+                alert('Error signing out: ' + result.error);
+            }
+        });
+
+        // Navigation handlers
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                document.querySelectorAll('.nav-item').forEach(navItem => {
+                    navItem.classList.remove('active');
+                });
+                
+                item.classList.add('active');
+                
+                const text = item.querySelector('span').textContent;
+                alert(`${text} functionality coming soon!`);
+            });
+        });
+    </script>
+</body>
+</html>

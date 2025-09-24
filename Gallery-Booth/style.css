@@ -1,0 +1,448 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Abel', sans-serif;
+    background: #121212;
+    color: #ffffff;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.dashboard-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.dashboard-header {
+    background: rgba(26, 26, 26, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+    padding: 16px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.2s ease;
+}
+
+.logo-section:hover {
+    opacity: 0.8;
+}
+
+.logo {
+    width: 32px;
+    height: 32px;
+}
+
+.logo-text {
+    font-size: 24px;
+    font-weight: 400;
+    color: #ffffff;
+}
+
+.user-section {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.user-name {
+    font-size: 16px;
+    font-weight: 400;
+    color: #ffffff;
+}
+
+.user-email {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.logout-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    font-family: 'Abel', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.logout-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+}
+
+/* Gallery Main */
+.gallery-main {
+    flex: 1;
+    overflow: hidden;
+    background: #0d0d0d;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* Gallery Canvas */
+.gallery-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 10758px;
+    height: 7590px;
+    transform-origin: top left;
+    will-change: transform;
+}
+
+/* Gallery Images - Masonry Layout with Dynamic Height */
+.gallery-image {
+    position: absolute;
+    cursor: pointer;
+    user-select: none;
+    border-radius: 0px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    display: block;
+    z-index: 1;
+    width: 240px; /* 1.2배 크기 (200 * 1.2) for consistent columns */
+    height: auto; /* Dynamic height based on aspect ratio */
+    object-fit: cover;
+}
+
+.gallery-image:hover {
+    z-index: 10;
+    transform: scale(1.02);
+    opacity: 0.9;
+}
+
+/* Gallery Placeholder for loading states */
+.gallery-placeholder {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    text-align: center;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 0px;
+    transition: opacity 0.3s ease;
+}
+
+.welcome-section {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.welcome-title {
+    font-size: 32px;
+    font-weight: 400;
+    color: #ffffff;
+    margin-bottom: 8px;
+}
+
+.welcome-subtitle {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+}
+
+.stat-card {
+    background: rgba(26, 26, 26, 0.8);
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    background: rgba(26, 26, 26, 0.9);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.stat-icon {
+    font-size: 32px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+.stat-content h3 {
+    font-size: 24px;
+    font-weight: 400;
+    color: #ffffff;
+    margin-bottom: 4px;
+}
+
+.stat-content p {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Actions Section */
+.actions-section {
+    margin-bottom: 48px;
+}
+
+.section-title {
+    font-size: 24px;
+    font-weight: 400;
+    color: #ffffff;
+    margin-bottom: 24px;
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+}
+
+.action-button {
+    background: rgba(26, 26, 26, 0.8);
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    width: 100%;
+}
+
+.action-button:hover {
+    background: rgba(26, 26, 26, 0.9);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.action-icon {
+    font-size: 24px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+.action-content h3 {
+    font-size: 18px;
+    font-weight: 400;
+    color: #ffffff;
+    margin-bottom: 4px;
+}
+
+.action-content p {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Activity Section */
+.activity-section {
+    margin-bottom: 48px;
+}
+
+.activity-list {
+    background: rgba(26, 26, 26, 0.8);
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.activity-item {
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.05);
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-icon {
+    font-size: 20px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-text {
+    font-size: 16px;
+    color: #ffffff;
+    margin-bottom: 4px;
+}
+
+.activity-time {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(26, 26, 26, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 0.5px solid rgba(255, 255, 255, 0.1);
+    padding: 8px 0;
+    z-index: 100;
+}
+
+.nav-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease;
+    min-width: 60px;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-icon {
+    font-size: 20px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-item span {
+    font-size: 12px;
+    font-weight: 400;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header-content {
+        padding: 0 16px;
+    }
+    
+    .user-info {
+        display: none;
+    }
+    
+    .gallery-main {
+        padding: 0;
+    }
+    
+    .welcome-title {
+        font-size: 28px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-bottom: 32px;
+    }
+    
+    .actions-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .nav-content {
+        padding: 0 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .welcome-title {
+        font-size: 24px;
+    }
+    
+    .welcome-subtitle {
+        font-size: 14px;
+    }
+    
+    .stat-card,
+    .action-button {
+        padding: 20px;
+    }
+    
+    .activity-item {
+        padding: 16px 20px;
+    }
+}

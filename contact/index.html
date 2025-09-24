@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Abric</title>
+    <link rel="icon" type="image/png" href="../logo/black.png" media="(prefers-color-scheme: light)">
+    <link rel="icon" type="image/png" href="../logo/light.png" media="(prefers-color-scheme: dark)">
+    <link rel="shortcut icon" type="image/png" href="../logo/light.png">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Abel:wght@400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Main Content Section -->
+        <div class="main-content">
+            <h1 class="title">Please, Contact Us with Next</h1>
+            
+            <!-- Contact Icons -->
+            <div class="contact-icons">
+                <div class="contact-item">
+                    <div class="icon-container">
+                        <img src="../logo/Github.png" alt="GitHub" class="contact-icon github-icon">
+                    </div>
+                    <span class="contact-label">Github</span>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="icon-container">
+                        <img src="../logo/Instagram.png" alt="Instagram" class="contact-icon instagram-icon">
+                    </div>
+                    <span class="contact-label">Instagram</span>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="icon-container">
+                        <img src="../logo/Email.png" alt="Email" class="contact-icon email-icon">
+                    </div>
+                    <span class="contact-label">Email</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-content">
+                <a href="../main/" class="logo-section">
+                    <img src="../logo/light.png" alt="Abric Logo" class="logo">
+                    <span class="logo-text">Abric</span>
+                </a>
+                <div class="nav-links desktop-nav">
+                    <a href="../main/" class="nav-link">Product</a>
+                    <a href="#" class="nav-link">Community</a>
+                    <a href="index.html" class="nav-link active">Contact</a>
+                </div>
+                <!-- Mobile Hamburger Menu -->
+                <button class="hamburger-menu" id="hamburgerMenu">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Mobile Slide Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-menu-content">
+                <div class="mobile-menu-items">
+                    <a href="../main/" class="mobile-nav-link">
+                        Product
+                        <svg class="nav-arrow" width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 1L14 1L8 7" stroke="white" stroke-width="1.05" stroke-linecap="square" stroke-linejoin="miter"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="mobile-nav-link">
+                        Community
+                        <svg class="nav-arrow" width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 1L14 1L8 7" stroke="white" stroke-width="1.05" stroke-linecap="square" stroke-linejoin="miter"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="mobile-nav-link active">
+                        Contact
+                        <svg class="nav-arrow" width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 1L14 1L8 7" stroke="white" stroke-width="1.05" stroke-linecap="square" stroke-linejoin="miter"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="module">
+        import { authUtils } from '../auth/auth-utils.js';
+
+        // Mobile menu functionality
+        const hamburgerMenu = document.getElementById('hamburgerMenu');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        // Toggle mobile menu
+        hamburgerMenu.addEventListener('click', () => {
+            if (mobileMenu.classList.contains('active')) {
+                mobileMenu.classList.remove('active');
+                hamburgerMenu.classList.remove('active');
+            } else {
+                mobileMenu.classList.add('active');
+                hamburgerMenu.classList.add('active');
+            }
+        });
+
+        // Close menu when clicking outside
+        mobileMenu.addEventListener('click', (e) => {
+            if (e.target === mobileMenu) {
+                mobileMenu.classList.remove('active');
+                hamburgerMenu.classList.remove('active');
+            }
+        });
+
+        // Close menu when pressing escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+                mobileMenu.classList.remove('active');
+                hamburgerMenu.classList.remove('active');
+            }
+        });
+
+        // Contact page doesn't need authentication state management
+    </script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abric</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="../logo/light.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../logo/light.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../logo/light.png">
+    <link rel="shortcut icon" href="../logo/light.png">
+    <meta name="theme-color" content="#121212">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Abel:wght@400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Main Content Section -->
+        <div class="main-content">
+            <h1 class="title">Abric</h1>
+            <p class="subtitle">find your favorite instantly</p>
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="window.location.href='../auth/signup.html'">Look up</button>
+                <button class="btn btn-secondary" onclick="window.location.href='../auth/signin.html'">Sign in now</button>
+            </div>
+        </div>
+
+        <!-- Product Images Grid -->
+        <div class="images-grid">
+            <div class="image-item item-1">
+                <img class="product-img-1" src="https://cdn.cosmos.so/2ead38b5-7edf-499b-8e33-5f2446e1395a?format=jpeg" alt="Product 1">
+            </div>
+            <div class="image-item item-2">
+                <img class="product-img-2" src="https://cdn.cosmos.so/5107ff8a-e13d-44cb-96b3-fae59caabc50?format=jpeg" alt="Product 2">
+            </div>
+            <div class="image-item item-3">
+                <img class="product-img-3" src="https://cdn.cosmos.so/1f13d426-7fbe-4ca8-a40f-e375be4daad5?format=jpeg" alt="Product 3">
+            </div>
+            <div class="image-item item-4">
+                <img class="product-img-4" src="https://cdn.cosmos.so/b625d3f6-4aa9-4c5b-b1ba-f00f5811c3a6?format=jpeg" alt="Product 4">
+            </div>
+            <div class="image-item item-5">
+                <img class="product-img-5" src="https://cdn.cosmos.so/b5f8f4fe-7894-45eb-8916-63f722e40a7a?format=jpeg" alt="Product 5">
+            </div>
+            <div class="image-item item-6">
+                <img class="product-img-6" src="https://cdn.cosmos.so/8415f6ed-afb2-4364-a246-9815e1a84dbc?format=jpeg" alt="Product 6">
+            </div>
+            <div class="image-item item-7">
+                <img class="product-img-7" src="https://cdn.cosmos.so/283cfdcb-78b1-48bc-8a2f-7bbf9833f28f?format=jpeg" alt="Product 7">
+            </div>
+            <div class="image-item item-8">
+                <img class="product-img-8" src="https://cdn.cosmos.so/6c2a8809-ca86-482c-8332-883d58587328?format=jpeg" alt="Product 8">
+            </div>
+            <div class="image-item item-9">
+                <img class="product-img-9" src="https://cdn.cosmos.so/3e5593d7-b85d-4b93-9ef4-f02cb8641e5d?format=jpeg" alt="Product 9">
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-content">
+                <div class="logo-section">
+                    <img src="../logo/light.png" alt="Abric Logo" class="logo">
+                    <span class="logo-text">Abric</span>
+                </div>
+                <div class="nav-links desktop-nav">
+                    <a href="#" class="nav-link">Product</a>
+                    <a href="#" class="nav-link">Community</a>
+                    <a href="../contact/" class="nav-link">Contact</a>
+                </div>
+                <!-- Mobile Hamburger Menu -->
+                <button class="hamburger-menu" id="hamburgerMenu">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Mobile Slide Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-menu-content">
+                <div class="mobile-menu-items">
+                    <a href="#" class="mobile-nav-link">
+                        Product
+                        <svg class="nav-arrow" width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 1L14 1L8 7" stroke="white" stroke-width="1.05" stroke-linecap="square" stroke-linejoin="miter"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="mobile-nav-link">
+                        Community
+                        <svg class="nav-arrow" width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 1L14 1L8 7" stroke="white" stroke-width="1.05" stroke-linecap="square" stroke-linejoin="miter"/>
+                        </svg>
+                    </a>
+                    <a href="../contact/" class="mobile-nav-link">
+                        Contact
+                        <svg class="nav-arrow" width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 1L14 1L8 7" stroke="white" stroke-width="1.05" stroke-linecap="square" stroke-linejoin="miter"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="module">
+        import { authUtils } from '../auth/auth-utils.js';
+
+        // Mobile menu functionality
+        const hamburgerMenu = document.getElementById('hamburgerMenu');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        // Toggle mobile menu
+        hamburgerMenu.addEventListener('click', () => {
+            if (mobileMenu.classList.contains('active')) {
+                mobileMenu.classList.remove('active');
+                hamburgerMenu.classList.remove('active');
+            } else {
+                mobileMenu.classList.add('active');
+                hamburgerMenu.classList.add('active');
+            }
+        });
+
+        // Close menu when clicking outside
+        mobileMenu.addEventListener('click', (e) => {
+            if (e.target === mobileMenu) {
+                mobileMenu.classList.remove('active');
+                hamburgerMenu.classList.remove('active');
+            }
+        });
+
+        // Close menu when pressing escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+                mobileMenu.classList.remove('active');
+                hamburgerMenu.classList.remove('active');
+            }
+        });
+
+        // Check authentication state and update UI accordingly
+        let authStateChecked = false;
+        
+        authUtils.onAuthStateChange((user) => {
+            if (!authStateChecked) {
+                authStateChecked = true;
+                console.log('Auth state initialized');
+            }
+            
+            if (user) {
+                // User is signed in
+                console.log('User signed in:', user.displayName || user.email);
+                updateUIForAuthenticatedUser();
+            } else {
+                // User is signed out
+                console.log('User signed out');
+                updateUIForUnauthenticatedUser();
+            }
+        });
+        
+        function updateUIForAuthenticatedUser() {
+            // Update button text for signed-in users
+            const signInButton = document.querySelector('.btn-secondary');
+            if (signInButton) {
+                signInButton.textContent = 'Gallery Booth';
+               signInButton.onclick = () => {
+                   window.location.href = '../Gallery-Booth/';
+               };
+            }
+        }
+        
+        function updateUIForUnauthenticatedUser() {
+            // Reset button text for unauthenticated users
+            const signInButton = document.querySelector('.btn-secondary');
+            if (signInButton) {
+                signInButton.textContent = 'Sign in now';
+                signInButton.onclick = () => {
+                    window.location.href = '../auth/signin.html';
+                };
+            }
+        }
+    </script>
+</body>
+</html>
