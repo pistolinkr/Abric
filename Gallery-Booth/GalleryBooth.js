@@ -20,16 +20,41 @@ export class SimpleCursorCanvasOverride {
         canvas.style.width = this.frameWidth + 'px';
         canvas.style.height = this.frameHeight + 'px';
         
+        // Enable hardware acceleration
+        canvas.style.transform = 'translateZ(0)';
+        canvas.style.willChange = 'transform';
+        canvas.style.backfaceVisibility = 'hidden';
+        canvas.style.perspective = '1000px';
+        canvas.style.transformStyle = 'preserve-3d';
+        
         // Hide scrollbars
         document.body.style.overflow = 'hidden';
         document.documentElement.style.overflow = 'hidden';
         
-        // Apply scrollbar hiding styles
+        // Apply scrollbar hiding styles and hardware acceleration
         const style = document.createElement('style');
         style.textContent = `
-            body, html { overflow: hidden !important; }
+            body, html { 
+                overflow: hidden !important; 
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
             *::-webkit-scrollbar { display: none !important; }
-            * { scrollbar-width: none !important; -ms-overflow-style: none !important; }
+            * { 
+                scrollbar-width: none !important; 
+                -ms-overflow-style: none !important;
+                -webkit-backface-visibility: hidden;
+                backface-visibility: hidden;
+            }
+            canvas {
+                -webkit-transform: translateZ(0);
+                -moz-transform: translateZ(0);
+                -ms-transform: translateZ(0);
+                -o-transform: translateZ(0);
+                transform: translateZ(0);
+                -webkit-perspective: 1000px;
+                perspective: 1000px;
+            }
         `;
         document.head.appendChild(style);
         
@@ -54,7 +79,7 @@ export class SimpleCursorCanvasOverride {
         const maxScrollY = Math.max(0, this.frameHeight - viewportHeight);
         this.x = -maxScrollX / 2;
         this.y = -maxScrollY / 2;
-        canvas.style.transform = `translate(${this.x}px, ${this.y}px)`;
+        canvas.style.transform = `translate3d(${this.x}px, ${this.y}px, 0)`;
         
         // Store cleanup function
         this.cleanup = () => {
@@ -79,7 +104,8 @@ export class SimpleCursorCanvasOverride {
             this.x += diffX * 0.04;
             this.y += diffY * 0.04;
             
-            canvas.style.transform = `translate(${this.x}px, ${this.y}px)`;
+            // Use hardware-accelerated transform with translate3d for GPU acceleration
+            canvas.style.transform = `translate3d(${this.x}px, ${this.y}px, 0)`;
             
             if (Math.abs(diffX) > 0.1 || Math.abs(diffY) > 0.1) {
                 this.animationId = requestAnimationFrame(animate);
@@ -194,6 +220,9 @@ export class GalleryItemsCreator {
                         transition: transform 0.3s ease, opacity 0.3s ease;
                         display: block;
                         opacity: 0;
+                        transform: translateZ(0);
+                        will-change: transform, opacity;
+                        backface-visibility: hidden;
                     `;
                     
                     // Find shortest column
@@ -229,14 +258,14 @@ export class GalleryItemsCreator {
                             img.style.opacity = '1';
                         }, 50);
                         
-                        // Add hover effect
+                        // Add hover effect with hardware acceleration
                         img.addEventListener('mouseenter', () => {
-                            img.style.transform = 'scale(1.02)';
+                            img.style.transform = 'translateZ(0) scale3d(1.02, 1.02, 1)';
                             img.style.opacity = '0.9';
                         });
                         
                         img.addEventListener('mouseleave', () => {
-                            img.style.transform = 'scale(1)';
+                            img.style.transform = 'translateZ(0) scale3d(1, 1, 1)';
                             img.style.opacity = '1';
                         });
                         
