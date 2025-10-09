@@ -1,0 +1,51 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ============================================
+    // 갤러리 부스 접근 제한 규칙
+    // ============================================
+    
+    // Instagram 미디어 - 인증된 사용자만 접근 가능
+    match /instagram_media/{document} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // 갤러리 이미지 - 인증된 사용자만 접근 가능
+    match /gallery_images/{document} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // 사용자 업로드 이미지 - 본인 데이터만 접근 가능
+    match /user_uploads/{userId}/{document} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // 사용자 데이터 - 본인 데이터만 접근 가능
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // 갤러리 세션 - 인증된 사용자만 접근 가능
+    match /gallery_sessions/{document} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // 공개 데이터 - 인증된 사용자만 읽기 가능
+    match /public/{document=**} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+    
+    // 관리자 전용
+    match /admin/{document=**} {
+      allow read, write: if request.auth != null && request.auth.token.admin == true;
+    }
+    
+    // 나머지 모든 문서는 접근 불가
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

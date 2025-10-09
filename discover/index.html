@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover - Abric</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Abel:wght@400&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../logo/light.png">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="discover-header">
+            <div class="header-content">
+                <h1 class="page-title">Discover</h1>
+                <p class="page-subtitle">Explore trending images and collections</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="discover-main">
+            <!-- Featured Section -->
+            <section class="featured-section">
+                <div class="section-header">
+                    <h2 class="section-title">Featured</h2>
+                    <div class="section-line"></div>
+                </div>
+                <div class="featured-grid" id="featuredGrid">
+                    <!-- Featured items will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Trending Section -->
+            <section class="trending-section">
+                <div class="section-header">
+                    <h2 class="section-title">Trending</h2>
+                    <div class="section-line"></div>
+                </div>
+                <div class="trending-grid" id="trendingGrid">
+                    <!-- Trending items will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Categories Section -->
+            <section class="categories-section">
+                <div class="section-header">
+                    <h2 class="section-title">Categories</h2>
+                    <div class="section-line"></div>
+                </div>
+                <div class="categories-grid" id="categoriesGrid">
+                    <!-- Categories will be loaded here -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav" id="mainNav">
+            <div class="nav-content">
+                <a href="../Gallery-Booth/" class="nav-item logo-item">
+                    <img src="../logo/light.png" alt="Abric Logo" class="nav-logo">
+                </a>
+                <a href="../discover/" class="nav-item active">
+                    <span>Discover</span>
+                </a>
+                <a href="#" class="nav-item" id="searchBtn">
+                    <span>Search</span>
+                </a>
+                <!-- Search Input in Navigation -->
+                <div class="search-input-container" id="searchInputContainer">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search images, tags, users...">
+                    <button class="search-close" id="searchClose">×</button>
+                </div>
+                <div class="nav-spacer"></div>
+                <a href="../Gallery-Booth/" class="nav-item" id="uploadBtn">
+                    <span>Create</span>
+                </a>
+                <a href="../profile/" class="nav-item" id="profileBtn">
+                    <span>Profile</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Drop Zone Indicators -->
+        <div class="drop-zone-indicator drop-zone-top" id="dropZoneTop"></div>
+        <div class="drop-zone-indicator drop-zone-bottom" id="dropZoneBottom"></div>
+        <div class="drop-zone-indicator drop-zone-left" id="dropZoneLeft"></div>
+        <div class="drop-zone-indicator drop-zone-right" id="dropZoneRight"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module">
+        import { authUtils } from '../auth/auth-utils.js';
+
+        // DOM elements
+        const featuredGrid = document.getElementById('featuredGrid');
+        const trendingGrid = document.getElementById('trendingGrid');
+        const categoriesGrid = document.getElementById('categoriesGrid');
+
+        // Auth check - 인증된 사용자만 discover 페이지 접근 가능
+        let authCheckDone = false;
+        
+        const checkAuthAndLoad = async () => {
+            if (authCheckDone) return;
+            
+            try {
+                // Check current auth state first
+                const currentUser = authUtils.getCurrentUser();
+                
+                if (currentUser) {
+                    console.log('User already authenticated, loading Discover page');
+                    authCheckDone = true;
+                    initializePage();
+                    return;
+                }
+                
+                // If no current user, wait for auth state
+                const user = await authUtils.waitForAuthState(1500);
+                
+                if (user) {
+                    console.log('User authenticated, loading Discover page');
+                    authCheckDone = true;
+                    initializePage();
+                } else {
+                    console.log('User not authenticated, redirecting to 404 page');
+                    authCheckDone = true;
+                    window.location.href = '../404.html';
+                }
+            } catch (error) {
+                console.error('Auth check error:', error);
+                console.log('Auth check failed, redirecting to 404 page');
+                authCheckDone = true;
+                window.location.href = '../404.html';
+            }
+        };
+        
+        // Initialize page
+        function initializePage() {
+            loadFeaturedContent();
+            loadTrendingContent();
+            loadCategories();
+            setupNavigation();
+            setupSearch();
+        }
+        
+        // Start auth check immediately
+        checkAuthAndLoad();
+
+
+        // Load featured content
+        function loadFeaturedContent() {
+            const featuredItems = [
+                { id: 1, title: "Nature Collection", image: "https://picsum.photos/400/300?random=1", author: "NatureLover" },
+                { id: 2, title: "Urban Photography", image: "https://picsum.photos/400/250?random=2", author: "CityShooter" },
+                { id: 3, title: "Abstract Art", image: "https://picsum.photos/400/350?random=3", author: "AbstractMind" },
+                { id: 4, title: "Portrait Series", image: "https://picsum.photos/400/400?random=4", author: "PortraitPro" }
+            ];
+
+            featuredItems.forEach(item => {
+                const itemElement = createFeaturedItem(item);
+                featuredGrid.appendChild(itemElement);
+            });
+        }
+
+        // Load trending content
+        function loadTrendingContent() {
+            const trendingItems = [
+                { id: 1, image: "https://picsum.photos/300/400?random=5", likes: 1247, author: "TrendingUser1" },
+                { id: 2, image: "https://picsum.photos/300/300?random=6", likes: 892, author: "TrendingUser2" },
+                { id: 3, image: "https://picsum.photos/300/500?random=7", likes: 1563, author: "TrendingUser3" },
+                { id: 4, image: "https://picsum.photos/300/350?random=8", likes: 743, author: "TrendingUser4" },
+                { id: 5, image: "https://picsum.photos/300/450?random=9", likes: 1124, author: "TrendingUser5" },
+                { id: 6, image: "https://picsum.photos/300/400?random=10", likes: 987, author: "TrendingUser6" }
+            ];
+
+            trendingItems.forEach(item => {
+                const itemElement = createTrendingItem(item);
+                trendingGrid.appendChild(itemElement);
+            });
+        }
+
+        // Load categories
+        function loadCategories() {
+            const categories = [
+                { name: "Nature", image: "https://picsum.photos/200/200?random=11", count: 1247 },
+                { name: "Architecture", image: "https://picsum.photos/200/200?random=12", count: 892 },
+                { name: "Portrait", image: "https://picsum.photos/200/200?random=13", count: 1563 },
+                { name: "Abstract", image: "https://picsum.photos/200/200?random=14", count: 743 },
+                { name: "Street", image: "https://picsum.photos/200/200?random=15", count: 1124 },
+                { name: "Minimalist", image: "https://picsum.photos/200/200?random=16", count: 987 }
+            ];
+
+            categories.forEach(category => {
+                const categoryElement = createCategoryItem(category);
+                categoriesGrid.appendChild(categoryElement);
+            });
+        }
+
+        // Create featured item element
+        function createFeaturedItem(item) {
+            const element = document.createElement('div');
+            element.className = 'featured-item';
+            element.innerHTML = `
+                <div class="featured-image">
+                    <img src="${item.image}" alt="${item.title}" loading="lazy">
+                    <div class="featured-overlay">
+                        <h3 class="featured-title">${item.title}</h3>
+                        <p class="featured-author">by ${item.author}</p>
+                    </div>
+                </div>
+            `;
+            return element;
+        }
+
+        // Create trending item element
+        function createTrendingItem(item) {
+            const element = document.createElement('div');
+            element.className = 'trending-item';
+            element.innerHTML = `
+                <div class="trending-image">
+                    <img src="${item.image}" alt="Trending image" loading="lazy">
+                    <div class="trending-overlay">
+                        <div class="trending-stats">
+                            <span class="likes">♥ ${item.likes}</span>
+                        </div>
+                        <p class="trending-author">${item.author}</p>
+                    </div>
+                </div>
+            `;
+            return element;
+        }
+
+        // Create category item element
+        function createCategoryItem(category) {
+            const element = document.createElement('div');
+            element.className = 'category-item';
+            element.innerHTML = `
+                <div class="category-image">
+                    <img src="${category.image}" alt="${category.name}" loading="lazy">
+                    <div class="category-overlay">
+                        <h3 class="category-name">${category.name}</h3>
+                        <p class="category-count">${category.count} images</p>
+                    </div>
+                </div>
+            `;
+            return element;
+        }
+
+        // Setup navigation
+        function setupNavigation() {
+            // Navigation Position Management
+            const mainNav = document.getElementById('mainNav');
+            let currentPosition = localStorage.getItem('navPosition') || 'top';
+            
+            // Load saved position
+            setNavPosition(currentPosition);
+            
+            // Listen for storage changes
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'navPosition' && e.newValue) {
+                    setNavPosition(e.newValue);
+                }
+            });
+            
+            
+            function setNavPosition(position) {
+                // Remove all position classes
+                mainNav.classList.remove('nav-top', 'nav-bottom', 'nav-left', 'nav-right');
+                document.body.classList.remove('nav-left-active', 'nav-right-active', 'nav-bottom-active');
+                
+                // Add new position class to nav
+                if (position !== 'top') {
+                    mainNav.classList.add(`nav-${position}`);
+                }
+                
+                // Add corresponding padding class to body
+                if (position === 'left' || position === 'right') {
+                    document.body.classList.add(`nav-${position}-active`);
+                } else if (position === 'bottom') {
+                    document.body.classList.add('nav-bottom-active');
+                }
+                
+                currentPosition = position;
+            }
+        }
+
+        // Setup search functionality
+        function setupSearch() {
+            const searchBtn = document.getElementById('searchBtn');
+            const searchInputContainer = document.getElementById('searchInputContainer');
+            const searchInput = document.getElementById('searchInput');
+            const searchClose = document.getElementById('searchClose');
+            const discoverBtn = document.querySelector('.nav-item.active span');
+
+            searchBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                searchInputContainer.classList.add('active');
+                mainNav.classList.add('search-active');
+                setTimeout(() => {
+                    searchInput.focus();
+                }, 300);
+            });
+
+            searchClose.addEventListener('click', () => {
+                searchInputContainer.classList.remove('active');
+                mainNav.classList.remove('search-active');
+                searchInput.value = '';
+            });
+
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    searchInputContainer.classList.remove('active');
+                    mainNav.classList.remove('search-active');
+                    searchInput.value = '';
+                } else if (e.key === 'Enter') {
+                    const query = searchInput.value.trim();
+                    if (query) {
+                        console.log('Searching for:', query);
+                        // Perform search
+                        performSearch(query);
+                    }
+                }
+            });
+        }
+
+        // Search functionality
+        function performSearch(query) {
+            console.log('Performing search for:', query);
+            
+            // Filter featured items
+            const featuredItems = document.querySelectorAll('.featured-item');
+            let visibleCount = 0;
+            
+            featuredItems.forEach(item => {
+                const title = item.querySelector('.featured-title')?.textContent.toLowerCase() || '';
+                const author = item.querySelector('.featured-author')?.textContent.toLowerCase() || '';
+                
+                if (title.includes(query.toLowerCase()) || 
+                    author.includes(query.toLowerCase())) {
+                    item.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Filter trending items
+            const trendingItems = document.querySelectorAll('.trending-item');
+            trendingItems.forEach(item => {
+                const author = item.querySelector('.trending-author')?.textContent.toLowerCase() || '';
+                
+                if (author.includes(query.toLowerCase())) {
+                    item.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Filter categories
+            const categoryItems = document.querySelectorAll('.category-item');
+            categoryItems.forEach(item => {
+                const name = item.querySelector('.category-name')?.textContent.toLowerCase() || '';
+                
+                if (name.includes(query.toLowerCase())) {
+                    item.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Show search results message
+            if (visibleCount === 0) {
+                console.log('No results found for:', query);
+            } else {
+                console.log(`Found ${visibleCount} results for:`, query);
+            }
+            
+            // Close search input after search
+            searchInputContainer.classList.remove('active');
+            mainNav.classList.remove('search-active');
+            searchInput.value = '';
+        }
+
+        // Brightness Detection Engine for Navigation Bar
+        class NavigationBrightnessAdapter {
+            constructor() {
+                this.nav = document.getElementById('mainNav');
+                this.navItems = this.nav.querySelectorAll('.nav-item');
+                this.threshold = 128; // 기준 명도값 (0-255)
+                this.updateInterval = null;
+                this.isActive = false;
+                this.init();
+            }
+
+            init() {
+                // 초기 색상 감지
+                this.detectAndUpdateColors();
+                
+                // 스크롤 이벤트 리스너
+                let scrollTimeout;
+                window.addEventListener('scroll', () => {
+                    clearTimeout(scrollTimeout);
+                    scrollTimeout = setTimeout(() => {
+                        this.detectAndUpdateColors();
+                    }, 16); // 60fps
+                });
+
+                // 리사이즈 이벤트 리스너
+                window.addEventListener('resize', () => {
+                    this.detectAndUpdateColors();
+                });
+
+                // 주기적 업데이트 (선택적)
+                this.updateInterval = setInterval(() => {
+                    this.detectAndUpdateColors();
+                }, 1000);
+            }
+
+            detectAndUpdateColors() {
+                if (!this.nav || !this.navItems.length) return;
+
+                this.navItems.forEach((item, index) => {
+                    const brightness = this.getBackgroundBrightness(item);
+                    this.updateItemColor(item, brightness);
+                });
+            }
+
+            getBackgroundBrightness(element) {
+                const rect = element.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+
+                // 요소 뒤의 배경 색상 감지
+                const elementsAtPoint = document.elementsFromPoint(centerX, centerY);
+                let maxBrightness = 0;
+                let detectedColor = '#1A1A1A'; // 기본값
+
+                elementsAtPoint.forEach(el => {
+                    if (el === this.nav || this.nav.contains(el)) return;
+
+                    const bgColor = this.getComputedBackgroundColor(el);
+                    const brightness = this.calculateBrightness(bgColor);
+                    
+                    if (brightness > maxBrightness) {
+                        maxBrightness = brightness;
+                        detectedColor = bgColor;
+                    }
+                });
+
+                return maxBrightness;
+            }
+
+            getComputedBackgroundColor(element) {
+                const computedStyle = window.getComputedStyle(element);
+                let bgColor = computedStyle.backgroundColor;
+
+                // 투명한 배경 처리
+                if (bgColor === 'rgba(0, 0, 0, 0)' || bgColor === 'transparent') {
+                    let parent = element.parentElement;
+                    while (parent && parent !== document.body) {
+                        const parentStyle = window.getComputedStyle(parent);
+                        if (parentStyle.backgroundColor !== 'rgba(0, 0, 0, 0)' && 
+                            parentStyle.backgroundColor !== 'transparent') {
+                            bgColor = parentStyle.backgroundColor;
+                            break;
+                        }
+                        parent = parent.parentElement;
+                    }
+                }
+
+                return bgColor || '#1A1A1A';
+            }
+
+            calculateBrightness(color) {
+                let r, g, b;
+
+                if (color.startsWith('#')) {
+                    const hex = color.replace('#', '');
+                    r = parseInt(hex.substr(0, 2), 16);
+                    g = parseInt(hex.substr(2, 2), 16);
+                    b = parseInt(hex.substr(4, 2), 16);
+                } else if (color.startsWith('rgb')) {
+                    const match = color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+                    if (match) {
+                        [, r, g, b] = match.map(Number);
+                    } else {
+                        return 0;
+                    }
+                } else {
+                    return 0;
+                }
+
+                // 개선된 명도 계산 - 중간 톤 처리 강화
+                const luminance = (r * 299 + g * 587 + b * 114) / 1000;
+                
+                // 대비 비율 계산 (0-1)
+                const contrast = Math.max(r, g, b) - Math.min(r, g, b);
+                const contrastRatio = contrast / 255;
+                
+                // 중간 톤에서 더 민감하게 반응하도록 가중치 적용
+                let adjustedLuminance = luminance;
+                
+                // 회색 계열 (낮은 대비) 감지
+                if (contrastRatio < 0.1) {
+                    // 순수 회색에 가까운 경우
+                    if (luminance > 180) {
+                        adjustedLuminance = 255; // 밝은 회색 → 밝게 처리
+                    } else if (luminance < 80) {
+                        adjustedLuminance = 0; // 어두운 회색 → 어둡게 처리
+                    } else {
+                        // 중간 회색은 약간 밝게 처리 (텍스트 가독성 우선)
+                        adjustedLuminance = luminance + 20;
+                    }
+                } else {
+                    // 컬러가 있는 경우 기존 계산 사용
+                    adjustedLuminance = luminance;
+                }
+                
+                return Math.min(255, Math.max(0, adjustedLuminance));
+            }
+
+            updateItemColor(item, brightness) {
+                // 개선된 임계값 처리 - 중간 톤에서 더 안정적인 판단
+                let isLight;
+                if (brightness > 140) {
+                    isLight = true; // 확실히 밝은 경우
+                } else if (brightness < 100) {
+                    isLight = false; // 확실히 어두운 경우
+                } else {
+                    // 중간 톤 (100-140)에서는 약간 보수적으로 밝게 처리
+                    isLight = brightness > 120;
+                }
+                
+                const textColor = isLight ? '#000000' : '#ffffff';
+                const logoFilter = isLight ? 'brightness(0)' : 'brightness(1)';
+
+                // 로고 아이템 처리
+                if (item.classList.contains('logo-item')) {
+                    const logo = item.querySelector('.nav-logo');
+                    if (logo) {
+                        logo.style.filter = logoFilter;
+                    }
+                }
+
+                // 텍스트 아이템 처리
+                const textSpan = item.querySelector('span');
+                if (textSpan) {
+                    textSpan.style.color = textColor;
+                }
+
+                // 아이템 자체 색상 설정
+                item.style.color = textColor;
+            }
+
+            destroy() {
+                if (this.updateInterval) {
+                    clearInterval(this.updateInterval);
+                }
+            }
+        }
+
+        // Initialize Brightness Detection Engine
+        document.addEventListener('DOMContentLoaded', () => {
+            window.navBrightnessAdapter = new NavigationBrightnessAdapter();
+        });
+
+    </script>
+</body>
+</html>

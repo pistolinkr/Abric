@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Batch Upload - Abric</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a1a;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .upload-section {
+            background: #2a2a2a;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            background: #1a1a1a;
+            color: #ffffff;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 14px;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #007AFF;
+        }
+        .button {
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+            transition: background 0.2s;
+        }
+        .button:hover {
+            background: #0056CC;
+        }
+        .button:disabled {
+            background: #444;
+            cursor: not-allowed;
+        }
+        .progress {
+            background: #333;
+            border-radius: 8px;
+            height: 20px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .progress-bar {
+            background: #007AFF;
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        .results {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+        .success {
+            color: #4CAF50;
+        }
+        .error {
+            color: #F44336;
+        }
+        .info {
+            color: #FFC107;
+        }
+        .url-list {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: #333;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007AFF;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #007AFF;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .status-message {
+            background: #333;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 14px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .status-success {
+            color: #4CAF50;
+        }
+        .status-error {
+            color: #F44336;
+        }
+        .status-info {
+            color: #FFC107;
+        }
+        .url-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #444;
+        }
+        .url-item:last-child {
+            border-bottom: none;
+        }
+        .url-text {
+            flex: 1;
+            margin-right: 10px;
+            word-break: break-all;
+        }
+        .url-status {
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+        .status-pending {
+            background: #333;
+            color: #888;
+        }
+        .status-processing {
+            background: #FFC107;
+            color: #000;
+        }
+        .status-success {
+            background: #4CAF50;
+            color: #fff;
+        }
+        .status-error {
+            background: #F44336;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📸 Instagram Batch Upload</h1>
+        
+        <div class="upload-section">
+            <h2>Instagram URLs 입력</h2>
+            <p>⚠️ <strong>중요:</strong> 공개 Instagram 포스트의 URL만 입력하세요. 개인정보 보호를 위해 모든 사용자의 이미지를 무단 수집하는 것은 불가능합니다.</p>
+            <p>한 줄에 하나씩 공개 Instagram URL을 입력하세요:</p>
+            <textarea id="urlInput" placeholder="https://www.instagram.com/p/ABC123/
+https://www.instagram.com/p/DEF456/
+https://www.instagram.com/p/GHI789/"></textarea>
+            
+            <div style="margin-top: 15px;">
+                <button class="button" onclick="processUrls()">🚀 배치 처리 시작</button>
+                <button class="button" onclick="clearInput()">🗑️ 지우기</button>
+                <button class="button" onclick="loadSampleUrls()">📋 샘플 URL 로드</button>
+            </div>
+            
+            <div class="progress" id="progressContainer" style="display: none;">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            
+            <div class="status-message" id="statusMessage" style="display: none;">
+                <div id="statusContent"></div>
+            </div>
+        </div>
+
+        <div class="results" id="results" style="display: none;">
+            <h2>처리 결과</h2>
+            <div class="stats" id="stats"></div>
+            <div id="resultDetails"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3001/api';
+        let currentUserId = null;
+        let processingUrls = [];
+        let processedCount = 0;
+
+        // 사용자 생성
+        async function ensureUser() {
+            if (currentUserId) return currentUserId;
+            
+            try {
+                const response = await fetch(`${API_BASE}/users/create`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: `batch_user_${Date.now()}`,
+                        isBusiness: false
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    currentUserId = data.user.id;
+                    console.log('User created:', currentUserId);
+                    return currentUserId;
+                }
+            } catch (error) {
+                console.error('Failed to create user:', error);
+            }
+            return null;
+        }
+
+        // URL 처리
+        async function processUrls() {
+            const urlInput = document.getElementById('urlInput');
+            const urls = urlInput.value.split('\n')
+                .map(url => url.trim())
+                .filter(url => url && url.includes('instagram.com'));
+
+            if (urls.length === 0) {
+                alert('Instagram URL을 입력해주세요.');
+                return;
+            }
+
+            const userId = await ensureUser();
+            if (!userId) {
+                alert('사용자 생성에 실패했습니다.');
+                return;
+            }
+
+            // 초기화
+            processingUrls = urls.map(url => ({ url, status: 'pending' }));
+            processedCount = 0;
+
+            // UI 업데이트
+            document.getElementById('progressContainer').style.display = 'block';
+            document.getElementById('statusMessage').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+            updateProgress(0);
+            updateStatus();
+
+            try {
+                console.log(`Processing ${urls.length} URLs...`);
+                
+                // 개별 URL 처리 (실시간 진행률 표시)
+                const results = await processUrlsIndividually(urls, userId);
+                
+                updateProgress(100);
+                showResults(results);
+            } catch (error) {
+                console.error('Batch processing error:', error);
+                addStatusMessage(`처리 중 오류가 발생했습니다: ${error.message}`, 'error');
+            }
+        }
+
+        // 개별 URL 처리
+        async function processUrlsIndividually(urls, userId) {
+            const results = {
+                processed: 0,
+                successful: 0,
+                failed: 0,
+                images: [],
+                errors: []
+            };
+
+            for (let i = 0; i < urls.length; i++) {
+                const url = urls[i];
+                
+                // 상태 업데이트
+                processingUrls[i].status = 'processing';
+                updateStatus();
+                
+                try {
+                    addStatusMessage(`처리 중 (${i + 1}/${urls.length}): ${url}`, 'info');
+                    
+                    const response = await fetch(`${API_BASE}/images/fetch`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            url: url,
+                            userId: userId
+                        })
+                    });
+
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        results.successful++;
+                        results.images.push(data.image);
+                        processingUrls[i].status = 'success';
+                        addStatusMessage(`✅ 성공: ${url}`, 'success');
+                    } else {
+                        results.failed++;
+                        results.errors.push({ url, error: data.error });
+                        processingUrls[i].status = 'error';
+                        addStatusMessage(`❌ 실패: ${url} - ${data.error}`, 'error');
+                    }
+                } catch (error) {
+                    results.failed++;
+                    results.errors.push({ url, error: error.message });
+                    processingUrls[i].status = 'error';
+                    addStatusMessage(`❌ 오류: ${url} - ${error.message}`, 'error');
+                }
+
+                results.processed++;
+                processedCount = i + 1;
+                updateProgress((processedCount / urls.length) * 100);
+                
+                // API 부하 방지를 위한 지연
+                if (i < urls.length - 1) {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                }
+            }
+
+            return results;
+        }
+
+        // 진행률 업데이트
+        function updateProgress(percent) {
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = percent + '%';
+        }
+
+        // 상태 메시지 추가
+        function addStatusMessage(message, type = 'info') {
+            const statusContent = document.getElementById('statusContent');
+            const timestamp = new Date().toLocaleTimeString();
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `status-${type}`;
+            messageDiv.innerHTML = `[${timestamp}] ${message}`;
+            statusContent.appendChild(messageDiv);
+            statusContent.scrollTop = statusContent.scrollHeight;
+        }
+
+        // URL 상태 업데이트
+        function updateStatus() {
+            const statusContent = document.getElementById('statusContent');
+            let statusHtml = '<h4>URL 처리 상태:</h4>';
+            
+            processingUrls.forEach((item, index) => {
+                statusHtml += `
+                    <div class="url-item">
+                        <div class="url-text">${item.url}</div>
+                        <div class="url-status status-${item.status}">
+                            ${getStatusText(item.status)}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            statusContent.innerHTML = statusHtml;
+        }
+
+        // 상태 텍스트 변환
+        function getStatusText(status) {
+            switch (status) {
+                case 'pending': return '대기 중';
+                case 'processing': return '처리 중';
+                case 'success': return '성공';
+                case 'error': return '실패';
+                default: return '알 수 없음';
+            }
+        }
+
+        // 결과 표시
+        function showResults(data) {
+            const resultsDiv = document.getElementById('results');
+            const statsDiv = document.getElementById('stats');
+            const detailsDiv = document.getElementById('resultDetails');
+
+            // 통계 표시
+            statsDiv.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-number">${data.processed}</div>
+                    <div class="stat-label">총 처리</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number success">${data.successful}</div>
+                    <div class="stat-label">성공</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number error">${data.failed}</div>
+                    <div class="stat-label">실패</div>
+                </div>
+            `;
+
+            // 상세 결과
+            let detailsHtml = '';
+
+            if (data.images && data.images.length > 0) {
+                detailsHtml += '<h3 class="success">✅ 성공한 이미지들:</h3>';
+                detailsHtml += '<div class="url-list">';
+                data.images.forEach(img => {
+                    detailsHtml += `<div>${img.original_url}</div>`;
+                });
+                detailsHtml += '</div>';
+            }
+
+            if (data.errors && data.errors.length > 0) {
+                detailsHtml += '<h3 class="error">❌ 실패한 URL들:</h3>';
+                detailsHtml += '<div class="url-list">';
+                data.errors.forEach(error => {
+                    detailsHtml += `<div class="error">${error.url} - ${error.error}</div>`;
+                });
+                detailsHtml += '</div>';
+            }
+
+            detailsDiv.innerHTML = detailsHtml;
+            resultsDiv.style.display = 'block';
+        }
+
+        // 입력 지우기
+        function clearInput() {
+            document.getElementById('urlInput').value = '';
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('progressContainer').style.display = 'none';
+            document.getElementById('statusMessage').style.display = 'none';
+            processingUrls = [];
+            processedCount = 0;
+        }
+
+        // 샘플 URL 로드
+        function loadSampleUrls() {
+            const sampleUrls = [
+                'https://www.instagram.com/p/Cz8K8K8K8K8/',
+                'https://www.instagram.com/p/C1xYzQbN2KX/',
+                'https://www.instagram.com/p/C1xYzQbN2KX/',
+                'https://www.instagram.com/p/C1xYzQbN2KX/',
+                'https://www.instagram.com/p/C1xYzQbN2KX/',
+                'https://www.instagram.com/p/C1xYzQbN2KX/',
+                'https://www.instagram.com/p/C1xYzQbN2KX/',
+                'https://www.instagram.com/p/C1xYzQbN2KX/'
+            ];
+            
+            document.getElementById('urlInput').value = sampleUrls.join('\n');
+        }
+
+        // 페이지 로드 시 샘플 URL 로드
+        window.onload = function() {
+            loadSampleUrls();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Settings - Abric</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Abel:wght@400&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../logo/light.png">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="profile-header">
+            <div class="header-content">
+                <div class="profile-avatar-section">
+                    <div class="profile-avatar" id="profileAvatar">
+                        <img src="" alt="Profile" class="avatar-image" id="avatarImage">
+                        <div class="avatar-overlay">
+                            <button class="change-avatar-btn" id="changeAvatarBtn">Change</button>
+                        </div>
+                    </div>
+                    <div class="profile-info">
+                        <h1 class="profile-name" id="profileName">User Name</h1>
+                        <p class="profile-email" id="profileEmail">user@example.com</p>
+                        <p class="profile-join-date" id="profileJoinDate">Joined January 2024</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Tab Navigation -->
+        <nav class="profile-tabs">
+            <button class="tab-btn active" data-tab="collection">Collection</button>
+            <button class="tab-btn" data-tab="settings">Settings</button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="profile-main">
+            <!-- Collection Tab -->
+            <section class="tab-content active" id="collection-tab">
+                <div class="section-header">
+                    <h2 class="section-title">My Collection</h2>
+                    <div class="section-line"></div>
+                </div>
+                <div id="collectionToolbar" style="display:flex;gap:12px;align-items:center;margin-bottom:12px;">
+                    <input id="collectionSearch" placeholder="Search saved items" style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:10px 12px;outline:none;">
+                    <select id="collectionFilter" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:10px 12px;">
+                        <option value="all">All collections</option>
+                    </select>
+                    <select id="collectionSort" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:10px 12px;">
+                        <option value="newest">Newest</option>
+                        <option value="oldest">Oldest</option>
+                        <option value="author">Author</option>
+                    </select>
+                    <button id="clearCollectionBtn" onclick="clearAllCollectionData()" style="background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.3);color:#ff6b6b;padding:10px 12px;cursor:pointer;" title="Clear all collection data">
+                        Clear
+                    </button>
+                </div>
+                
+                <div class="collection-grid" id="collectionGrid">
+                    <!-- Collection items will be loaded here -->
+                    <div class="collection-empty">
+                        <div class="empty-icon">📷</div>
+                        <h3>No items in collection yet</h3>
+                        <p>Start adding images from the Gallery Booth to build your collection</p>
+                        <button class="browse-gallery-btn" onclick="window.location.href='../Gallery-Booth/'">
+                            Browse Gallery
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Tab -->
+            <section class="tab-content" id="settings-tab">
+                <!-- Settings Sections -->
+                <div class="settings-section">
+                <div class="section-header">
+                    <h2 class="section-title">Account Settings</h2>
+                    <div class="section-line"></div>
+                </div>
+                
+                <div class="settings-grid">
+                    <!-- Personal Information -->
+                    <div class="setting-card">
+                        <div class="setting-header">
+                            <h3 class="setting-title">Personal Information</h3>
+                            <button class="edit-btn" id="editPersonalBtn">Edit</button>
+                        </div>
+                        <div class="setting-content">
+                            <div class="info-item">
+                                <label class="info-label">Display Name</label>
+                                <input type="text" class="info-input" id="displayNameInput" value="User Name" readonly>
+                            </div>
+                            <div class="info-item">
+                                <label class="info-label">Email</label>
+                                <input type="email" class="info-input" id="emailInput" value="user@example.com" readonly>
+                            </div>
+                            <div class="info-item">
+                                <label class="info-label">Bio</label>
+                                <textarea class="info-textarea" id="bioInput" placeholder="Tell us about yourself..." readonly></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Privacy Settings -->
+                    <div class="setting-card">
+                        <div class="setting-header">
+                            <h3 class="setting-title">Privacy Settings</h3>
+                        </div>
+                        <div class="setting-content">
+                            <div class="toggle-item">
+                                <div class="toggle-info">
+                                    <label class="toggle-label">Public Profile</label>
+                                    <p class="toggle-description">Make your profile visible to other users</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="publicProfileToggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-item">
+                                <div class="toggle-info">
+                                    <label class="toggle-label">Show Email</label>
+                                    <p class="toggle-description">Display your email on your profile</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="showEmailToggle">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-item">
+                                <div class="toggle-info">
+                                    <label class="toggle-label">Allow Messages</label>
+                                    <p class="toggle-description">Let other users send you messages</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="allowMessagesToggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notification Settings -->
+                    <div class="setting-card">
+                        <div class="setting-header">
+                            <h3 class="setting-title">Notifications</h3>
+                        </div>
+                        <div class="setting-content">
+                            <div class="toggle-item">
+                                <div class="toggle-info">
+                                    <label class="toggle-label">Email Notifications</label>
+                                    <p class="toggle-description">Receive notifications via email</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="emailNotificationsToggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-item">
+                                <div class="toggle-info">
+                                    <label class="toggle-label">Like Notifications</label>
+                                    <p class="toggle-description">Get notified when someone likes your images</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="likeNotificationsToggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-item">
+                                <div class="toggle-info">
+                                    <label class="toggle-label">Follow Notifications</label>
+                                    <p class="toggle-description">Get notified when someone follows you</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="followNotificationsToggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Image Detail Style -->
+                    <div class="setting-card">
+                        <div class="setting-header">
+                            <h3 class="setting-title">Image Detail Style</h3>
+                        </div>
+                        <div class="setting-content">
+                            <div class="style-selector">
+                                <p class="style-description">Choose your preferred image detail modal style inspired by popular platforms.</p>
+                                <div class="style-options">
+                                    <label class="style-option">
+                                        <input type="radio" name="imageDetailStyle" value="default">
+                                        <div class="style-card">
+                                            <div class="style-preview default-preview"></div>
+                                            <div class="style-label">Default</div>
+                                        </div>
+                                    </label>
+                                    <label class="style-option">
+                                        <input type="radio" name="imageDetailStyle" value="cosmos">
+                                        <div class="style-card">
+                                            <div class="style-preview cosmos-preview"></div>
+                                            <div class="style-label">Cosmos.so</div>
+                                        </div>
+                                    </label>
+                                    <label class="style-option">
+                                        <input type="radio" name="imageDetailStyle" value="arena">
+                                        <div class="style-card">
+                                            <div class="style-preview arena-preview"></div>
+                                            <div class="style-label">Are.na</div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Drag Scroll Toggle -->
+                    <div class="setting-card">
+                        <div class="setting-header">
+                            <h3 class="setting-title">Drag Scroll</h3>
+                        </div>
+                        <div class="setting-content">
+                            <div class="toggle-setting">
+                                <div class="toggle-info">
+                                    <p class="toggle-description">Enable drag scrolling in Gallery Booth. Click and drag to scroll like on mobile devices.</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="dragScrollToggle">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Position Settings -->
+                    <div class="setting-card">
+                        <div class="setting-header">
+                            <h3 class="setting-title">Navigation Position</h3>
+                        </div>
+                        <div class="setting-content">
+                            <div class="nav-position-selector">
+                                <label class="nav-position-option">
+                                    <input type="radio" name="navPosition" value="top" checked>
+                                    <div class="nav-position-card">
+                                        <div class="nav-position-icon">
+                                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                                <rect x="5" y="5" width="30" height="5" fill="currentColor"/>
+                                                <rect x="5" y="12" width="30" height="23" fill="currentColor" opacity="0.2"/>
+                                            </svg>
+                                        </div>
+                                        <div class="nav-position-label">Top</div>
+                                    </div>
+                                </label>
+                                <label class="nav-position-option">
+                                    <input type="radio" name="navPosition" value="bottom">
+                                    <div class="nav-position-card">
+                                        <div class="nav-position-icon">
+                                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                                <rect x="5" y="5" width="30" height="23" fill="currentColor" opacity="0.2"/>
+                                                <rect x="5" y="30" width="30" height="5" fill="currentColor"/>
+                                            </svg>
+                                        </div>
+                                        <div class="nav-position-label">Bottom</div>
+                                    </div>
+                                </label>
+                                <label class="nav-position-option">
+                                    <input type="radio" name="navPosition" value="left">
+                                    <div class="nav-position-card">
+                                        <div class="nav-position-icon">
+                                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                                <rect x="5" y="5" width="5" height="30" fill="currentColor"/>
+                                                <rect x="12" y="5" width="23" height="30" fill="currentColor" opacity="0.2"/>
+                                            </svg>
+                                        </div>
+                                        <div class="nav-position-label">Left</div>
+                                    </div>
+                                </label>
+                                <label class="nav-position-option">
+                                    <input type="radio" name="navPosition" value="right">
+                                    <div class="nav-position-card">
+                                        <div class="nav-position-icon">
+                                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                                <rect x="5" y="5" width="23" height="30" fill="currentColor" opacity="0.2"/>
+                                                <rect x="30" y="5" width="5" height="30" fill="currentColor"/>
+                                            </svg>
+                                        </div>
+                                        <div class="nav-position-label">Right</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Settings -->
+                    <div class="setting-card">
+                        <div class="setting-header">
+                            <h3 class="setting-title">Security</h3>
+                        </div>
+                        <div class="setting-content">
+                            <div class="action-item">
+                                <div class="action-info">
+                                    <label class="action-label">Change Password</label>
+                                    <p class="action-description">Update your account password</p>
+                                </div>
+                                <button class="action-btn" id="changePasswordBtn">Change</button>
+                            </div>
+                            <div class="action-item">
+                                <div class="action-info">
+                                    <label class="action-label">Two-Factor Authentication</label>
+                                    <p class="action-description">Add an extra layer of security</p>
+                                </div>
+                                <button class="action-btn" id="twoFactorBtn">Enable</button>
+                            </div>
+                            <div class="action-item">
+                                <div class="action-info">
+                                    <label class="action-label">Connected Accounts</label>
+                                    <p class="action-description">Manage linked social accounts</p>
+                                </div>
+                                <button class="action-btn" id="connectedAccountsBtn">Manage</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account Actions -->
+                    <div class="setting-card">
+                        <div class="setting-header">
+                            <h3 class="setting-title">Account Actions</h3>
+                        </div>
+                        <div class="setting-content">
+                            <div class="action-item">
+                                <div class="action-info">
+                                    <label class="action-label">Sign Out</label>
+                                    <p class="action-description">Sign out of your account</p>
+                                </div>
+                                <button class="action-btn logout-btn" id="logoutBtn">Sign Out</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Danger Zone -->
+                    <div class="setting-card danger-card">
+                        <div class="setting-header">
+                            <h3 class="setting-title">Danger Zone</h3>
+                        </div>
+                        <div class="setting-content">
+                            <div class="action-item">
+                                <div class="action-info">
+                                    <label class="action-label">Delete Account</label>
+                                    <p class="action-description">Permanently delete your account and all data</p>
+                                </div>
+                                <button class="action-btn danger-btn" id="deleteAccountBtn">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav" id="mainNav">
+            <div class="nav-content">
+                <a href="../Gallery-Booth/" class="nav-item logo-item">
+                    <img src="../logo/light.png" alt="Abric Logo" class="nav-logo">
+                </a>
+                <a href="../discover/" class="nav-item">
+                    <span>Discover</span>
+                </a>
+                <a href="#" class="nav-item" id="searchBtn">
+                    <span>Search</span>
+                </a>
+                <!-- Search Input in Navigation -->
+                <div class="search-input-container" id="searchInputContainer">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search images, tags, users...">
+                    <button class="search-close" id="searchClose">×</button>
+                </div>
+                <div class="nav-spacer"></div>
+                <a href="../Gallery-Booth/" class="nav-item" id="uploadBtn">
+                    <span>Create</span>
+                </a>
+                <a href="../profile/" class="nav-item active">
+                    <span>Profile</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Drop Zone Indicators -->
+        <div class="drop-zone-indicator drop-zone-top" id="dropZoneTop"></div>
+        <div class="drop-zone-indicator drop-zone-bottom" id="dropZoneBottom"></div>
+        <div class="drop-zone-indicator drop-zone-left" id="dropZoneLeft"></div>
+        <div class="drop-zone-indicator drop-zone-right" id="dropZoneRight"></div>
+
+        <!-- Hidden file input for avatar upload -->
+        <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+    </div>
+
+    <!-- Scripts -->
+    <script type="module">
+        import { authUtils } from '../auth/auth-utils.js';
+
+        // DOM elements
+        const profileName = document.getElementById('profileName');
+        const profileEmail = document.getElementById('profileEmail');
+        const profileJoinDate = document.getElementById('profileJoinDate');
+        const avatarImage = document.getElementById('avatarImage');
+        const displayNameInput = document.getElementById('displayNameInput');
+        const emailInput = document.getElementById('emailInput');
+        const bioInput = document.getElementById('bioInput');
+        const editPersonalBtn = document.getElementById('editPersonalBtn');
+        const changeAvatarBtn = document.getElementById('changeAvatarBtn');
+        const avatarUpload = document.getElementById('avatarUpload');
+
+        // Auth check - 인증된 사용자만 profile 페이지 접근 가능
+        let authCheckDone = false;
+        
+        const checkAuthAndLoad = async () => {
+            if (authCheckDone) return;
+            
+            try {
+                // Check current auth state first
+                const currentUser = authUtils.getCurrentUser();
+                
+                if (currentUser) {
+                    console.log('User already authenticated, loading Profile page');
+                    authCheckDone = true;
+                    initializePage();
+                    return;
+                }
+                
+                // If no current user, wait for auth state
+                const user = await authUtils.waitForAuthState(1500);
+                
+                if (user) {
+                    console.log('User authenticated, loading Profile page');
+                    authCheckDone = true;
+                    initializePage();
+                } else {
+                    console.log('User not authenticated, redirecting to 404 page');
+                    authCheckDone = true;
+                    window.location.href = '../404.html';
+                }
+            } catch (error) {
+                console.error('Auth check error:', error);
+                console.log('Auth check failed, redirecting to 404 page');
+                authCheckDone = true;
+                window.location.href = '../404.html';
+            }
+        };
+        
+        // Initialize page
+        function initializePage() {
+            loadUserProfile();
+            setupEventListeners();
+            setupNavigation();
+            setupSearch();
+            setupTabs();
+            loadUserCollection();
+            setupCollectionControls();
+        }
+        
+        // Start auth check immediately
+        checkAuthAndLoad();
+
+        // Load user profile data
+        function loadUserProfile() {
+            const user = authUtils.getCurrentUser();
+            const profileInfo = authUtils.getUserProfile();
+            
+            if (user && profileInfo) {
+                // Update profile information
+                profileName.textContent = profileInfo.displayName || 'User Name';
+                profileEmail.textContent = profileInfo.email || 'user@example.com';
+                
+                // Format join date
+                if (profileInfo.createdAt) {
+                    const joinDate = new Date(profileInfo.createdAt);
+                    profileJoinDate.textContent = `Joined ${joinDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`;
+                } else {
+                    profileJoinDate.textContent = 'Joined Recently';
+                }
+                
+                // Update avatar
+                if (profileInfo.photoURL) {
+                    avatarImage.src = profileInfo.photoURL;
+                } else {
+                    // Use initials or default
+                    const displayName = profileInfo.displayName || 'User';
+                    const initials = displayName.split(' ').map(name => name.charAt(0)).join('').toUpperCase();
+                    
+                    avatarImage.style.background = 'rgba(255, 255, 255, 0.1)';
+                    avatarImage.style.color = 'rgba(255, 255, 255, 0.8)';
+                    avatarImage.style.fontSize = '24px';
+                    avatarImage.style.fontWeight = '400';
+                    avatarImage.style.display = 'flex';
+                    avatarImage.style.alignItems = 'center';
+                    avatarImage.style.justifyContent = 'center';
+                    avatarImage.textContent = initials;
+                }
+                
+                // Update form inputs
+                displayNameInput.value = profileInfo.displayName || '';
+                emailInput.value = profileInfo.email || '';
+            }
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Edit personal information
+            editPersonalBtn.addEventListener('click', () => {
+                const isEditing = displayNameInput.readOnly;
+                
+                if (isEditing) {
+                    // Enable editing
+                    displayNameInput.readOnly = false;
+                    bioInput.readOnly = false;
+                    editPersonalBtn.textContent = 'Save';
+                    editPersonalBtn.classList.add('saving');
+                } else {
+                    // Save changes
+                    savePersonalInfo();
+                }
+            });
+
+            // Change avatar
+            changeAvatarBtn.addEventListener('click', () => {
+                avatarUpload.click();
+            });
+
+            avatarUpload.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    uploadAvatar(file);
+                }
+            });
+
+            // Toggle switches
+            document.querySelectorAll('.toggle-switch input').forEach(toggle => {
+                toggle.addEventListener('change', (e) => {
+                    console.log(`${e.target.id} changed to:`, e.target.checked);
+                    // TODO: Save toggle state
+                });
+            });
+
+            // Action buttons
+            document.getElementById('changePasswordBtn').addEventListener('click', () => {
+                alert('Change password functionality coming soon!');
+            });
+
+            document.getElementById('twoFactorBtn').addEventListener('click', () => {
+                alert('Two-factor authentication setup coming soon!');
+            });
+
+            document.getElementById('connectedAccountsBtn').addEventListener('click', () => {
+                alert('Connected accounts management coming soon!');
+            });
+
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                if (confirm('Are you sure you want to sign out?')) {
+                    authUtils.signOut().then(() => {
+                        // Redirect to sign in page
+                        window.location.href = '../auth/signin.html';
+                    }).catch((error) => {
+                        console.error('Sign out error:', error);
+                        alert('Error signing out. Please try again.');
+                    });
+                }
+            });
+
+            document.getElementById('deleteAccountBtn').addEventListener('click', () => {
+                if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                    alert('Account deletion functionality coming soon!');
+                }
+            });
+        }
+
+        // Save personal information
+        function savePersonalInfo() {
+            const newDisplayName = displayNameInput.value.trim();
+            const newBio = bioInput.value.trim();
+            
+            if (!newDisplayName) {
+                alert('Display name cannot be empty');
+                return;
+            }
+            
+            // TODO: Update user profile in Firebase
+            console.log('Saving personal info:', { newDisplayName, newBio });
+            
+            // Update UI
+            profileName.textContent = newDisplayName;
+            displayNameInput.readOnly = true;
+            bioInput.readOnly = true;
+            editPersonalBtn.textContent = 'Edit';
+            editPersonalBtn.classList.remove('saving');
+            
+            alert('Profile updated successfully!');
+        }
+
+        // Upload avatar
+        function uploadAvatar(file) {
+            // TODO: Upload to Firebase Storage
+            console.log('Uploading avatar:', file.name);
+            
+            // Create preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                avatarImage.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+            
+            alert('Avatar uploaded successfully!');
+        }
+
+        // Setup navigation (same as other pages)
+        function setupNavigation() {
+            const mainNav = document.getElementById('mainNav');
+            const dropZones = {
+                top: document.getElementById('dropZoneTop'),
+                bottom: document.getElementById('dropZoneBottom')
+            };
+            
+            let isDragging = false;
+            let dragStartX, dragStartY;
+            let currentPosition = localStorage.getItem('navPosition') || 'bottom';
+            
+            // Load saved position
+            setNavPosition(currentPosition);
+            
+            mainNav.addEventListener('mousedown', (e) => {
+                if (e.target.closest('.nav-item')) {
+                    return;
+                }
+                
+                isDragging = true;
+                mainNav.classList.add('dragging');
+                
+                const rect = mainNav.getBoundingClientRect();
+                dragStartX = e.clientX - rect.left;
+                dragStartY = e.clientY - rect.top;
+                
+                e.preventDefault();
+            });
+            
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                
+                const mouseX = e.clientX;
+                const mouseY = e.clientY;
+                const windowWidth = window.innerWidth;
+                const windowHeight = window.innerHeight;
+                
+                // 반자유 드래그 - 위, 아래, 좌, 우 사이드에만 붙을 수 있음
+                const newLeft = mouseX - dragStartX;
+                const newTop = mouseY - dragStartY;
+                
+                // 화면 경계 내에서만 이동하도록 제한
+                const navWidth = mainNav.offsetWidth;
+                const navHeight = mainNav.offsetHeight;
+                const maxLeft = windowWidth - navWidth;
+                const maxTop = windowHeight - navHeight;
+                
+                const clampedLeft = Math.max(0, Math.min(newLeft, maxLeft));
+                const clampedTop = Math.max(0, Math.min(newTop, maxTop));
+                
+                mainNav.style.left = `${clampedLeft}px`;
+                mainNav.style.top = `${clampedTop}px`;
+                mainNav.style.bottom = 'auto';
+                mainNav.style.right = 'auto';
+                mainNav.style.transform = 'none';
+                mainNav.style.transition = 'none'; // 드래그 중에는 애니메이션 비활성화
+                
+                // Remove all position classes when dragging
+                mainNav.classList.remove('nav-top', 'nav-bottom', 'nav-left', 'nav-right');
+            });
+            
+            document.addEventListener('mouseup', (e) => {
+                if (!isDragging) return;
+                
+                isDragging = false;
+                mainNav.classList.remove('dragging');
+                
+                const mouseX = e.clientX;
+                const mouseY = e.clientY;
+                const windowWidth = window.innerWidth;
+                const windowHeight = window.innerHeight;
+                
+                // 반자유 드래그 완료 - 가장 가까운 사이드에 붙기
+                const edgeThreshold = 150;
+                let newPosition = currentPosition;
+                
+                // 가장 가까운 사이드 계산
+                if (mouseY < edgeThreshold) {
+                    newPosition = 'top';
+                } else if (mouseY > windowHeight - edgeThreshold) {
+                    newPosition = 'bottom';
+                } else if (mouseX < edgeThreshold) {
+                    newPosition = 'left';
+                } else if (mouseX > windowWidth - edgeThreshold) {
+                    newPosition = 'right';
+                }
+                
+                // Reset inline styles
+                mainNav.style.left = '';
+                mainNav.style.top = '';
+                mainNav.style.bottom = '';
+                mainNav.style.right = '';
+                mainNav.style.transform = '';
+                mainNav.style.transition = 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)'; // 스프링 애니메이션
+                
+                // Apply new position
+                if (newPosition !== currentPosition) {
+                    currentPosition = newPosition;
+                }
+                setNavPosition(newPosition);
+                localStorage.setItem('navPosition', newPosition);
+                
+                Object.values(dropZones).forEach(zone => {
+                    zone.classList.remove('active');
+                });
+            });
+            
+            function setNavPosition(position) {
+                mainNav.classList.remove('nav-top', 'nav-bottom');
+                mainNav.classList.add(`nav-${position}`);
+            }
+        }
+
+        // Setup search functionality
+        function setupSearch() {
+            const searchBtn = document.getElementById('searchBtn');
+            const searchInputContainer = document.getElementById('searchInputContainer');
+            const searchInput = document.getElementById('searchInput');
+            const searchClose = document.getElementById('searchClose');
+            const discoverBtn = document.querySelector('.nav-item span');
+
+            searchBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                searchInputContainer.classList.add('active');
+                mainNav.classList.add('search-active');
+                setTimeout(() => {
+                    searchInput.focus();
+                }, 300);
+            });
+
+            searchClose.addEventListener('click', () => {
+                searchInputContainer.classList.remove('active');
+                mainNav.classList.remove('search-active');
+                searchInput.value = '';
+            });
+
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    searchInputContainer.classList.remove('active');
+                    mainNav.classList.remove('search-active');
+                    searchInput.value = '';
+                } else if (e.key === 'Enter') {
+                    const query = searchInput.value.trim();
+                    if (query) {
+                        console.log('Searching for:', query);
+                        // Perform search
+                        performSearch(query);
+                    }
+                }
+            });
+        }
+
+        // Search functionality
+        function performSearch(query) {
+            console.log('Performing search for:', query);
+            
+            // For profile page, we can search through settings or redirect to gallery
+            if (query.toLowerCase().includes('image') || 
+                query.toLowerCase().includes('photo') || 
+                query.toLowerCase().includes('gallery')) {
+                // Redirect to gallery for image-related searches
+                window.location.href = '../Gallery-Booth/';
+            } else {
+                console.log('Search query:', query);
+                // For other searches, just log for now
+            }
+            
+            // Close search input after search
+            searchInputContainer.classList.remove('active');
+            mainNav.classList.remove('search-active');
+            searchInput.value = '';
+        }
+
+        // Image Detail Style Settings
+        function setupImageDetailStyleSettings() {
+            const styleRadios = document.querySelectorAll('input[name="imageDetailStyle"]');
+            const currentStyle = localStorage.getItem('imageDetailStyle') || 'default';
+            
+            // Set initial radio button state
+            styleRadios.forEach(radio => {
+                if (radio.value === currentStyle) {
+                    radio.checked = true;
+                }
+                
+                // Add change event listener
+                radio.addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        const newStyle = e.target.value;
+                        localStorage.setItem('imageDetailStyle', newStyle);
+                        
+                        // Trigger storage event for other tabs/windows
+                        window.dispatchEvent(new StorageEvent('storage', {
+                            key: 'imageDetailStyle',
+                            newValue: newStyle
+                        }));
+                        
+                        // Show notification
+                        showNotification(`Image detail style changed to ${newStyle}`);
+                    }
+                });
+            });
+        }
+
+        // Drag Scroll Toggle Settings
+        function setupDragScrollToggle() {
+            const dragScrollToggle = document.getElementById('dragScrollToggle');
+            const isEnabled = localStorage.getItem('dragScrollEnabled') === 'true';
+            
+            // Set initial toggle state
+            dragScrollToggle.checked = isEnabled;
+            
+            // Add change event listener
+            dragScrollToggle.addEventListener('change', (e) => {
+                const enabled = e.target.checked;
+                localStorage.setItem('dragScrollEnabled', enabled);
+                
+                // Trigger storage event for other tabs/windows
+                window.dispatchEvent(new StorageEvent('storage', {
+                    key: 'dragScrollEnabled',
+                    newValue: enabled.toString()
+                }));
+                
+                // Show notification
+                showNotification(enabled ? 'Drag scroll enabled' : 'Drag scroll disabled');
+            });
+        }
+        
+        function showNotification(message) {
+            // Simple notification (you can enhance this)
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: rgba(26, 26, 26, 0.95);
+                color: white;
+                padding: 12px 20px;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                z-index: 10000;
+                font-size: 14px;
+                font-family: Abel, sans-serif;
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 2000);
+        }
+
+        // Navigation Position Settings
+        function setupNavPositionSettings() {
+            const navPositionRadios = document.querySelectorAll('input[name="navPosition"]');
+            const currentPosition = localStorage.getItem('navPosition') || 'top';
+            
+            // Set initial radio button state
+            navPositionRadios.forEach(radio => {
+                if (radio.value === currentPosition) {
+                    radio.checked = true;
+                }
+                
+                // Add change event listener
+                radio.addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        const newPosition = e.target.value;
+                        localStorage.setItem('navPosition', newPosition);
+                        
+                        // Apply position immediately to this page
+                        applyNavPosition(newPosition);
+                        
+                        // Trigger storage event for other tabs/windows
+                        window.dispatchEvent(new StorageEvent('storage', {
+                            key: 'navPosition',
+                            newValue: newPosition
+                        }));
+                    }
+                });
+            });
+        }
+        
+        function applyNavPosition(position) {
+            const mainNav = document.getElementById('mainNav');
+            
+            if (!mainNav) return;
+            
+            // Remove all position classes
+            mainNav.classList.remove('nav-top', 'nav-bottom', 'nav-left', 'nav-right');
+            document.body.classList.remove('nav-left-active', 'nav-right-active', 'nav-bottom-active');
+            
+            // Add new position class to nav
+            if (position !== 'top') {
+                mainNav.classList.add(`nav-${position}`);
+            }
+            
+            // Add corresponding padding class to body
+            if (position === 'left' || position === 'right') {
+                document.body.classList.add(`nav-${position}-active`);
+            } else if (position === 'bottom') {
+                document.body.classList.add('nav-bottom-active');
+            }
+        }
+        
+        // Initialize drag scroll toggle
+        setupDragScrollToggle();
+        
+        // Initialize image detail style settings
+        setupImageDetailStyleSettings();
+        
+        // Initialize nav position settings
+        setupNavPositionSettings();
+        
+        // Apply saved position on load
+        const savedPosition = localStorage.getItem('navPosition') || 'top';
+        applyNavPosition(savedPosition);
+        
+        // Listen for storage changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'navPosition' && e.newValue) {
+                applyNavPosition(e.newValue);
+                
+                // Update radio buttons
+                const navPositionRadios = document.querySelectorAll('input[name="navPosition"]');
+                navPositionRadios.forEach(radio => {
+                    radio.checked = (radio.value === e.newValue);
+                });
+            }
+        });
+
+        // Brightness Detection Engine for Navigation Bar
+        class NavigationBrightnessAdapter {
+            constructor() {
+                this.nav = document.getElementById('mainNav');
+                this.navItems = this.nav.querySelectorAll('.nav-item');
+                this.threshold = 128; // 기준 명도값 (0-255)
+                this.updateInterval = null;
+                this.isActive = false;
+                this.init();
+            }
+
+            init() {
+                // 초기 색상 감지
+                this.detectAndUpdateColors();
+                
+                // 스크롤 이벤트 리스너
+                let scrollTimeout;
+                window.addEventListener('scroll', () => {
+                    clearTimeout(scrollTimeout);
+                    scrollTimeout = setTimeout(() => {
+                        this.detectAndUpdateColors();
+                    }, 16); // 60fps
+                });
+
+                // 리사이즈 이벤트 리스너
+                window.addEventListener('resize', () => {
+                    this.detectAndUpdateColors();
+                });
+
+                // 주기적 업데이트 (선택적)
+                this.updateInterval = setInterval(() => {
+                    this.detectAndUpdateColors();
+                }, 1000);
+            }
+
+            detectAndUpdateColors() {
+                if (!this.nav || !this.navItems.length) return;
+
+                this.navItems.forEach((item, index) => {
+                    const brightness = this.getBackgroundBrightness(item);
+                    this.updateItemColor(item, brightness);
+                });
+            }
+
+            getBackgroundBrightness(element) {
+                const rect = element.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+
+                // 요소 뒤의 배경 색상 감지
+                const elementsAtPoint = document.elementsFromPoint(centerX, centerY);
+                let maxBrightness = 0;
+                let detectedColor = '#1A1A1A'; // 기본값
+
+                elementsAtPoint.forEach(el => {
+                    if (el === this.nav || this.nav.contains(el)) return;
+
+                    const bgColor = this.getComputedBackgroundColor(el);
+                    const brightness = this.calculateBrightness(bgColor);
+                    
+                    if (brightness > maxBrightness) {
+                        maxBrightness = brightness;
+                        detectedColor = bgColor;
+                    }
+                });
+
+                return maxBrightness;
+            }
+
+            getComputedBackgroundColor(element) {
+                const computedStyle = window.getComputedStyle(element);
+                let bgColor = computedStyle.backgroundColor;
+
+                // 투명한 배경 처리
+                if (bgColor === 'rgba(0, 0, 0, 0)' || bgColor === 'transparent') {
+                    let parent = element.parentElement;
+                    while (parent && parent !== document.body) {
+                        const parentStyle = window.getComputedStyle(parent);
+                        if (parentStyle.backgroundColor !== 'rgba(0, 0, 0, 0)' && 
+                            parentStyle.backgroundColor !== 'transparent') {
+                            bgColor = parentStyle.backgroundColor;
+                            break;
+                        }
+                        parent = parent.parentElement;
+                    }
+                }
+
+                return bgColor || '#1A1A1A';
+            }
+
+            calculateBrightness(color) {
+                let r, g, b;
+
+                if (color.startsWith('#')) {
+                    const hex = color.replace('#', '');
+                    r = parseInt(hex.substr(0, 2), 16);
+                    g = parseInt(hex.substr(2, 2), 16);
+                    b = parseInt(hex.substr(4, 2), 16);
+                } else if (color.startsWith('rgb')) {
+                    const match = color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+                    if (match) {
+                        [, r, g, b] = match.map(Number);
+                    } else {
+                        return 0;
+                    }
+                } else {
+                    return 0;
+                }
+
+                // 개선된 명도 계산 - 중간 톤 처리 강화
+                const luminance = (r * 299 + g * 587 + b * 114) / 1000;
+                
+                // 대비 비율 계산 (0-1)
+                const contrast = Math.max(r, g, b) - Math.min(r, g, b);
+                const contrastRatio = contrast / 255;
+                
+                // 중간 톤에서 더 민감하게 반응하도록 가중치 적용
+                let adjustedLuminance = luminance;
+                
+                // 회색 계열 (낮은 대비) 감지
+                if (contrastRatio < 0.1) {
+                    // 순수 회색에 가까운 경우
+                    if (luminance > 180) {
+                        adjustedLuminance = 255; // 밝은 회색 → 밝게 처리
+                    } else if (luminance < 80) {
+                        adjustedLuminance = 0; // 어두운 회색 → 어둡게 처리
+                    } else {
+                        // 중간 회색은 약간 밝게 처리 (텍스트 가독성 우선)
+                        adjustedLuminance = luminance + 20;
+                    }
+                } else {
+                    // 컬러가 있는 경우 기존 계산 사용
+                    adjustedLuminance = luminance;
+                }
+                
+                return Math.min(255, Math.max(0, adjustedLuminance));
+            }
+
+            updateItemColor(item, brightness) {
+                // 개선된 임계값 처리 - 중간 톤에서 더 안정적인 판단
+                let isLight;
+                if (brightness > 140) {
+                    isLight = true; // 확실히 밝은 경우
+                } else if (brightness < 100) {
+                    isLight = false; // 확실히 어두운 경우
+                } else {
+                    // 중간 톤 (100-140)에서는 약간 보수적으로 밝게 처리
+                    isLight = brightness > 120;
+                }
+                
+                const textColor = isLight ? '#000000' : '#ffffff';
+                const logoFilter = isLight ? 'brightness(0)' : 'brightness(1)';
+
+                // 로고 아이템 처리
+                if (item.classList.contains('logo-item')) {
+                    const logo = item.querySelector('.nav-logo');
+                    if (logo) {
+                        logo.style.filter = logoFilter;
+                    }
+                }
+
+                // 텍스트 아이템 처리
+                const textSpan = item.querySelector('span');
+                if (textSpan) {
+                    textSpan.style.color = textColor;
+                }
+
+                // 아이템 자체 색상 설정
+                item.style.color = textColor;
+            }
+
+            destroy() {
+                if (this.updateInterval) {
+                    clearInterval(this.updateInterval);
+                }
+            }
+        }
+
+        // Initialize Brightness Detection Engine
+        document.addEventListener('DOMContentLoaded', () => {
+            window.navBrightnessAdapter = new NavigationBrightnessAdapter();
+        });
+
+        // Tab functionality
+        function setupTabs() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetTab = btn.getAttribute('data-tab');
+                    
+                    // Remove active class from all tabs and contents
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    btn.classList.add('active');
+                    document.getElementById(`${targetTab}-tab`).classList.add('active');
+                });
+            });
+        }
+
+        // Load user collection
+        function loadUserCollection() {
+            const collectionGrid = document.getElementById('collectionGrid');
+            
+            // Get collection from localStorage - check multiple possible keys
+            let allItems = [];
+            const possibleKeys = ['userCollections', 'user_collection', 'abric_collections', 'collectionData'];
+            
+            for (const key of possibleKeys) {
+                const data = localStorage.getItem(key);
+                if (data) {
+                    try {
+                        const parsed = JSON.parse(data);
+                        if (Array.isArray(parsed)) {
+                            // If it's an array of collections, extract all items
+                            if (parsed.length > 0 && parsed[0].images) {
+                                allItems = parsed.reduce((acc, collection) => {
+                                    return acc.concat(collection.images || []);
+                                }, []);
+                            } else {
+                                // If it's a direct array of items
+                                allItems = parsed;
+                            }
+                        } else if (parsed && parsed.images) {
+                            // If it's a single collection object
+                            allItems = parsed.images || [];
+                        }
+                        if (allItems.length > 0) break;
+                    } catch (e) {
+                        console.warn(`Failed to parse localStorage key: ${key}`, e);
+                    }
+                }
+            }
+            
+            window.__allItems = allItems;
+            window.__collections = JSON.parse(localStorage.getItem('userCollections') || '[]');
+            populateFilterOptions();
+            
+            console.log('Loaded collection items:', allItems.length);
+            
+            if (window.__allItems.length === 0) {
+                // Show empty state
+                collectionGrid.innerHTML = `
+                    <div class="collection-empty">
+                        <div class="empty-icon">📷</div>
+                        <h3>No items in collection yet</h3>
+                        <p>Start adding images from the Gallery Booth to build your collection</p>
+                        <button class="browse-gallery-btn" onclick="window.location.href='../Gallery-Booth/'">
+                            Browse Gallery
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            // Render collection items with current controls
+            renderCollection();
+        }
+
+        function setupCollectionControls() {
+            const search = document.getElementById('collectionSearch');
+            const filter = document.getElementById('collectionFilter');
+            const sort = document.getElementById('collectionSort');
+            search.addEventListener('input', debounce(renderCollection, 150));
+            filter.addEventListener('change', renderCollection);
+            sort.addEventListener('change', renderCollection);
+        }
+
+        function populateFilterOptions() {
+            const filter = document.getElementById('collectionFilter');
+            filter.innerHTML = '<option value="all">All collections</option>' +
+              (window.__collections||[]).map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+        }
+
+        function getFilteredSortedItems() {
+            const q = (document.getElementById('collectionSearch').value||'').toLowerCase();
+            const filterId = document.getElementById('collectionFilter').value;
+            const sort = document.getElementById('collectionSort').value;
+            let items = (window.__allItems||[]).filter(it => {
+                const matchText = `${it.title||''} ${it.description||''} ${it.authorName||''}`.toLowerCase();
+                const matchQ = !q || matchText.includes(q);
+                const matchCol = filterId==='all' || it.collectionId===filterId;
+                return matchQ && matchCol;
+            });
+            items.sort((a,b)=>{
+                if (sort==='author') return (a.authorName||'').localeCompare(b.authorName||'');
+                if (sort==='oldest') return new Date(a.addedAt) - new Date(b.addedAt);
+                return new Date(b.addedAt) - new Date(a.addedAt);
+            });
+            return items;
+        }
+
+        function renderCollection() {
+            const collectionGrid = document.getElementById('collectionGrid');
+            const items = getFilteredSortedItems();
+            if (items.length===0) {
+                collectionGrid.innerHTML = `
+                    <div class="collection-empty">
+                        <div class="empty-icon">🗂️</div>
+                        <h3>No results</h3>
+                        <p>Try changing filters or create a new collection</p>
+                        <button class="browse-gallery-btn" onclick="window.location.href='../Gallery-Booth/'">Browse Gallery</button>
+                    </div>`;
+                return;
+            }
+            collectionGrid.innerHTML = '';
+            items.forEach((item, index) => {
+                const collectionItem = document.createElement('div');
+                collectionItem.className = 'collection-item';
+                
+                // Handle different data structures
+                const imageSrc = item.src || item.imageUrl || item.url || '';
+                const title = item.description || item.title || item.alt || 'Untitled';
+                const author = item.user || item.authorName || item.source || 'Unknown';
+                const date = item.savedAt || item.addedAt || item.date || new Date().toISOString();
+                
+                collectionItem.innerHTML = `
+                    <div class="collection-image">
+                        <img src="${imageSrc}" alt="${title}" loading="lazy">
+                        <div class="collection-overlay">
+                            <button class="remove-from-collection-btn" data-index="${index}">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 6L6 18M6 6l12 12"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="collection-info">
+                        <h4 class="collection-title">${title}</h4>
+                        <p class="collection-author">by ${author}</p>
+                        <p class="collection-date">${new Date(date).toLocaleDateString()}</p>
+                    </div>
+                `;
+                collectionGrid.appendChild(collectionItem);
+            });
+
+            // Add remove button event listeners
+            document.querySelectorAll('.remove-from-collection-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const index = parseInt(btn.getAttribute('data-index'));
+                    removeFromCollection(index);
+                });
+            });
+        }
+
+        // Remove item from collection
+        function removeFromCollection(index) {
+            // Remove from all possible storage locations
+            const possibleKeys = ['userCollections', 'user_collection', 'abric_collections', 'collectionData'];
+            
+            for (const key of possibleKeys) {
+                const data = localStorage.getItem(key);
+                if (data) {
+                    try {
+                        const parsed = JSON.parse(data);
+                        if (Array.isArray(parsed)) {
+                            // If it's an array of collections
+                            if (parsed.length > 0 && parsed[0].images) {
+                                let found = false;
+                                for (const collection of parsed) {
+                                    if (collection.images && collection.images.length > index) {
+                                        collection.images.splice(index, 1);
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if (found) {
+                                    localStorage.setItem(key, JSON.stringify(parsed));
+                                    break;
+                                }
+                            } else {
+                                // If it's a direct array of items
+                                if (parsed.length > index) {
+                                    parsed.splice(index, 1);
+                                    localStorage.setItem(key, JSON.stringify(parsed));
+                                    break;
+                                }
+                            }
+                        }
+                    } catch (e) {
+                        console.warn(`Failed to remove from localStorage key: ${key}`, e);
+                    }
+                }
+            }
+            
+            // Reload collection
+            loadUserCollection();
+        }
+        
+        // Clear all collection data (for testing/debugging)
+        function clearAllCollectionData() {
+            const possibleKeys = ['userCollections', 'user_collection', 'abric_collections', 'collectionData'];
+            possibleKeys.forEach(key => {
+                localStorage.removeItem(key);
+            });
+            loadUserCollection();
+            console.log('All collection data cleared');
+        }
+
+        function debounce(fn, delay){
+            let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), delay); };
+        }
+
+    </script>
+</body>
+</html>

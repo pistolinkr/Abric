@@ -7,10 +7,21 @@
 
 body {
     font-family: 'Abel', sans-serif;
-    background-color: #121212;
+    background-color: #1A1A1A;
     color: #ffffff;
     overflow-x: hidden;
     min-height: 100vh;
+}
+
+/* Global layout variable for unified horizontal page padding */
+:root { --page-padding-x: 80px; }
+
+@media (max-width: 768px) {
+    :root { --page-padding-x: 20px; }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    :root { --page-padding-x: 40px; }
 }
 
 .container {
@@ -42,7 +53,7 @@ body {
 /* Contact Icons */
 .contact-icons {
     display: flex;
-    gap: 77px;
+    gap: 80px;
     justify-content: center;
     align-items: center;
 }
@@ -53,7 +64,7 @@ body {
     align-items: center;
     gap: 8px;
     cursor: pointer;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .contact-item:hover {
@@ -68,7 +79,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .contact-item:hover .icon-container {
@@ -107,7 +118,7 @@ body {
     align-items: center;
     max-width: 1440px;
     margin: 0 auto;
-    padding: 0 50px;
+    padding: 0 var(--page-padding-x);
     height: 36px;
 }
 
@@ -117,7 +128,7 @@ body {
     gap: 20px;
     text-decoration: none;
     color: inherit;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .logo-section:hover {
@@ -149,7 +160,7 @@ body {
     color: #ffffff;
     text-decoration: none;
     line-height: 32px;
-    transition: color 0.3s ease;
+    transition: color 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .nav-link:hover {
@@ -252,7 +263,7 @@ body {
     color: #ffffff;
     text-decoration: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    transition: color 0.3s ease;
+    transition: color 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .mobile-nav-link:hover {
@@ -293,7 +304,7 @@ body {
     }
     
     .contact-icons {
-        gap: 50px;
+        gap: 60px;
     }
 }
 

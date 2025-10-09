@@ -10,31 +10,6 @@
 </head>
 <body>
     <div class="dashboard-container">
-        <!-- Header -->
-        <header class="dashboard-header">
-            <div class="header-content">
-                <a href="../main/" class="logo-section">
-                    <img src="../logo/light.png" alt="Abric Logo" class="logo">
-                    <span class="logo-text">Abric</span>
-                </a>
-                
-                <div class="user-section">
-                    <div class="user-info">
-                        <span class="user-name" id="userName">Welcome back!</span>
-                        <span class="user-email" id="userEmail"></span>
-                    </div>
-                    <button class="logout-button" id="logoutButton">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                            <polyline points="16,17 21,12 16,7"/>
-                            <line x1="21" y1="12" x2="9" y2="12"/>
-                        </svg>
-                        Sign Out
-                    </button>
-                </div>
-            </div>
-        </header>
-
         <!-- Gallery Canvas -->
         <main class="gallery-main">
             <div class="gallery-canvas" id="galleryCanvas">
@@ -42,122 +17,2305 @@
             </div>
         </main>
 
-        <!-- Navigation -->
-        <nav class="bottom-nav">
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav" id="mainNav">
             <div class="nav-content">
-                <a href="#" class="nav-item active">
-                    <div class="nav-icon">🏠</div>
-                    <span>Home</span>
+                <a href="../Gallery-Booth/" class="nav-item logo-item active">
+                    <img src="../logo/light.png" alt="Abric Logo" class="nav-logo">
                 </a>
                 <a href="#" class="nav-item">
-                    <div class="nav-icon">🔍</div>
+                    <span>Discover</span>
+                </a>
+                <a href="#" class="nav-item" id="searchBtn">
                     <span>Search</span>
                 </a>
-                <a href="#" class="nav-item">
-                    <div class="nav-icon">⭐</div>
-                    <span>Favorites</span>
+                <!-- Search Input in Navigation -->
+                <div class="search-input-container" id="searchInputContainer">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search images, tags, users...">
+                    <button class="search-close" id="searchClose">×</button>
+                </div>
+                <div class="nav-spacer"></div>
+                <a href="#" class="nav-item" id="uploadBtn">
+                    <span>Create</span>
                 </a>
-                <a href="#" class="nav-item">
-                    <div class="nav-icon">👤</div>
+                <a href="../profile/" class="nav-item" id="profileBtn">
                     <span>Profile</span>
                 </a>
             </div>
+            
+            <!-- Profile Hover Modal -->
+            <div class="profile-hover-modal" id="profileHoverModal">
+                <div class="profile-hover-header">
+                    <div class="profile-hover-avatar">AB</div>
+                    <div class="profile-hover-info">
+                        <h3 class="profile-hover-name">Abric User</h3>
+                        <p class="profile-hover-email">user@abric.com</p>
+                    </div>
+                </div>
+                <div class="profile-hover-stats">
+                    <div class="profile-stat">
+                        <span class="stat-value">127</span>
+                        <span class="stat-label">Saved</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span class="stat-value">43</span>
+                        <span class="stat-label">Collections</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span class="stat-value">892</span>
+                        <span class="stat-label">Followers</span>
+                    </div>
+                </div>
+                <div class="profile-hover-settings">
+                    <h4 class="settings-title">Quick Settings</h4>
+                    <div class="setting-item">
+                        <span class="setting-label">Image Detail Style</span>
+                        <select class="setting-select" id="quickImageDetailStyle">
+                            <option value="default">Default</option>
+                            <option value="cosmos">Cosmos.so</option>
+                            <option value="arena">Are.na</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <span class="setting-label">Theme</span>
+                        <select class="setting-select" id="quickTheme">
+                            <option value="dark">Dark</option>
+                            <option value="light">Light</option>
+                            <option value="auto">Auto</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <span class="setting-label">Privacy</span>
+                        <select class="setting-select" id="quickPrivacy">
+                            <option value="public">Public</option>
+                            <option value="private">Private</option>
+                            <option value="friends">Friends Only</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="profile-hover-actions">
+                    <a href="../profile/" class="profile-action-btn primary">View Full Profile</a>
+                    <button class="profile-action-btn secondary" id="signOutBtn">Sign Out</button>
+                </div>
+            </div>
+            <!-- Create Options in Navigation -->
+            <div class="create-options-container" id="createOptionsContainer">
+                <button class="create-option" id="uploadOption">
+                    <span class="create-icon">📁</span>
+                    <span>Upload</span>
+                </button>
+                <button class="create-option" id="recordOption">
+                    <span class="create-icon">🎥</span>
+                    <span>Record</span>
+                </button>
+                <button class="create-option" id="canvasOption">
+                    <span class="create-icon">🎨</span>
+                    <span>Canvas</span>
+                </button>
+                <button class="create-close" id="createClose">×</button>
+            </div>
         </nav>
+
+
     </div>
 
+    <!-- Hidden file inputs for different media types -->
+    <input type="file" id="imageUpload" accept="image/*" multiple style="display: none;">
+    <input type="file" id="videoUpload" accept="video/*" multiple style="display: none;">
+    <input type="file" id="audioUpload" accept="audio/*" multiple style="display: none;">
+    <input type="file" id="textUpload" accept=".txt,.md,.doc,.docx" multiple style="display: none;">
+    
+    <!-- Social Media Import Modal -->
+    <div class="import-modal" id="importModal" style="display: none;">
+        <div class="import-modal-content">
+            <div class="import-header">
+                <h3>Import from Social Media</h3>
+                <button class="import-close" id="importClose">×</button>
+            </div>
+            <div class="import-options">
+                <div class="import-platform">
+                    <label>Platform:</label>
+                    <select id="platformSelect">
+                        <option value="instagram">Instagram</option>
+                        <option value="twitter">Twitter</option>
+                        <option value="tiktok">TikTok</option>
+                        <option value="youtube">YouTube</option>
+                        <option value="facebook">Facebook</option>
+                    </select>
+                </div>
+                <div class="import-urls">
+                    <label>URLs (one per line):</label>
+                    <textarea id="importUrls" placeholder="https://instagram.com/p/...&#10;https://twitter.com/...&#10;https://tiktok.com/..."></textarea>
+                </div>
+                <div class="import-format">
+                    <label>Content Type:</label>
+                    <div class="format-options">
+                        <label><input type="checkbox" value="image" checked> Images</label>
+                        <label><input type="checkbox" value="video" checked> Videos</label>
+                        <label><input type="checkbox" value="audio" checked> Audio</label>
+                        <label><input type="checkbox" value="text" checked> Text</label>
+                    </div>
+                </div>
+                <button class="import-btn" id="importBtn">Import Posts</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Gallery Booth SDK -->
     <script type="module">
         import { authUtils } from '../auth/auth-utils.js';
-        import { GalleryBoothManager } from './GalleryBooth.js';
+        import { InstagramGallery } from './InstagramGallery.js';
 
         // DOM elements
-        const userNameElement = document.getElementById('userName');
-        const userEmailElement = document.getElementById('userEmail');
-        const logoutButton = document.getElementById('logoutButton');
         const galleryCanvas = document.getElementById('galleryCanvas');
 
-        // Initialize Gallery Booth Manager
-        const galleryManager = new GalleryBoothManager();
+        // Initialize Instagram Gallery
+        const galleryManager = new InstagramGallery();
 
-        // Auth check
+        // Auth check - 인증된 사용자만 갤러리 부스 접근 가능
         let authCheckDone = false;
         
-        const checkAuthAndLoad = () => {
+        const checkAuthAndLoad = async () => {
             if (authCheckDone) return;
             
-            const user = authUtils.checkAuthState();
+            try {
+                // Check current auth state first
+                const currentUser = authUtils.getCurrentUser();
+                
+                if (currentUser) {
+                    console.log('User already authenticated, loading Gallery Booth');
+            authCheckDone = true;
+            initializeGallery();
+            return;
+                }
+                
+                // If no current user, wait for auth state
+                const user = await authUtils.waitForAuthState(1500);
+            
             if (user) {
                 console.log('User authenticated, loading Gallery Booth');
                 authCheckDone = true;
-                loadUserData();
                 initializeGallery();
-                return;
-            }
-            
-            if (user === null) {
-                setTimeout(checkAuthAndLoad, 100);
             } else {
                 console.log('User not authenticated, redirecting to 404 page');
+                    authCheckDone = true;
+                    window.location.href = '../404.html';
+                }
+            } catch (error) {
+                console.error('Auth check error:', error);
+                console.log('Auth check failed, redirecting to 404 page');
                 authCheckDone = true;
                 window.location.href = '../404.html';
             }
         };
         
-        setTimeout(checkAuthAndLoad, 200);
-        
-        setTimeout(() => {
-            if (!authCheckDone) {
-                console.log('Auth check timeout, redirecting to 404 page');
-                authCheckDone = true;
-                window.location.href = '../404.html';
-            }
-        }, 3000);
+        // Start auth check immediately
+        checkAuthAndLoad();
 
-        // Load user data
-        function loadUserData() {
-            const user = authUtils.getCurrentUser();
-            if (user) {
-                const displayName = authUtils.getUserDisplayName();
-                const email = authUtils.getUserEmail();
-                
-                userNameElement.textContent = `Welcome, ${displayName}!`;
-                userEmailElement.textContent = email;
-            }
-        }
 
         // Initialize Gallery with SimpleCursorCanvasOverride functionality
         async function initializeGallery() {
             if (galleryCanvas) {
                 await galleryManager.initialize(galleryCanvas);
             }
+            
         }
 
-        // Logout functionality
-        logoutButton.addEventListener('click', async () => {
-            const result = await authUtils.signOut();
-            if (result.success) {
-                window.location.href = '../auth/signin.html';
-            } else {
-                alert('Error signing out: ' + result.error);
+
+        // Create options functionality
+        const uploadBtn = document.getElementById('uploadBtn');
+        const createOptionsContainer = document.getElementById('createOptionsContainer');
+        const uploadOption = document.getElementById('uploadOption');
+        const recordOption = document.getElementById('recordOption');
+        const canvasOption = document.getElementById('canvasOption');
+        const createClose = document.getElementById('createClose');
+        
+        // File inputs
+        const imageUpload = document.getElementById('imageUpload');
+        const videoUpload = document.getElementById('videoUpload');
+        const audioUpload = document.getElementById('audioUpload');
+        const textUpload = document.getElementById('textUpload');
+        
+        // Import modal
+        const importModal = document.getElementById('importModal');
+        const importClose = document.getElementById('importClose');
+        const importBtn = document.getElementById('importBtn');
+
+        // Create button click - show options
+        uploadBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showCreateOptions();
+        });
+        
+        // Create options click handlers
+        uploadOption.addEventListener('click', (e) => {
+            e.preventDefault();
+            hideCreateOptions();
+            imageUpload.click();
+        });
+        
+        recordOption.addEventListener('click', (e) => {
+            e.preventDefault();
+            hideCreateOptions();
+            showImportModal();
+        });
+        
+        canvasOption.addEventListener('click', (e) => {
+            e.preventDefault();
+            hideCreateOptions();
+            // Canvas functionality will be implemented later
+            console.log('Canvas option clicked');
+        });
+        
+        // Close create options
+        createClose.addEventListener('click', (e) => {
+            e.preventDefault();
+            hideCreateOptions();
+        });
+        
+        // Import modal handlers
+        importClose.addEventListener('click', (e) => {
+            e.preventDefault();
+            hideImportModal();
+        });
+        
+        importBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleImport();
+        });
+        
+        function showCreateOptions() {
+            createOptionsContainer.classList.add('active');
+            uploadBtn.classList.add('create-active');
+        }
+        
+        function hideCreateOptions() {
+            createOptionsContainer.classList.remove('active');
+            uploadBtn.classList.remove('create-active');
+        }
+        
+        function showImportModal() {
+            importModal.style.display = 'flex';
+        }
+        
+        function hideImportModal() {
+            importModal.style.display = 'none';
+        }
+        
+        function handleImport() {
+            const platform = document.getElementById('platformSelect').value;
+            const urls = document.getElementById('importUrls').value.split('\n').filter(url => url.trim());
+            const formats = Array.from(document.querySelectorAll('.format-options input:checked')).map(cb => cb.value);
+            
+            console.log('Importing from:', platform);
+            console.log('URLs:', urls);
+            console.log('Formats:', formats);
+            
+            // Import functionality will be implemented later
+            hideImportModal();
+        }
+
+        imageUpload.addEventListener('change', async (e) => {
+            const files = Array.from(e.target.files);
+            if (files.length === 0) return;
+
+            console.log(`Uploading ${files.length} images...`);
+            
+            for (const file of files) {
+                await uploadImage(file);
+            }
+            
+            // Reset input
+            imageUpload.value = '';
+        });
+
+        async function uploadImage(file) {
+            try {
+                // Create FormData
+                const formData = new FormData();
+                formData.append('image', file);
+                formData.append('userId', 'user_' + Date.now()); // 임시 사용자 ID
+
+                // Upload to server
+                const response = await fetch('http://localhost:3001/api/images/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('Image uploaded successfully:', result);
+                    
+                    // Refresh gallery to show new image
+                    await galleryManager.loadGalleryImages();
+                } else {
+                    console.error('Upload failed:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+            }
+        }
+
+        // Search functionality
+        const searchBtn = document.getElementById('searchBtn');
+        const searchInputContainer = document.getElementById('searchInputContainer');
+        const searchInput = document.getElementById('searchInput');
+        const searchClose = document.getElementById('searchClose');
+        const discoverBtn = document.querySelector('.nav-item span');
+
+        searchBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            searchInputContainer.classList.add('active');
+            mainNav.classList.add('search-active');
+            setTimeout(() => {
+                searchInput.focus();
+            }, 300);
+        });
+
+        searchClose.addEventListener('click', () => {
+            searchInputContainer.classList.remove('active');
+            mainNav.classList.remove('search-active');
+            searchInput.value = '';
+        });
+
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                searchInputContainer.classList.remove('active');
+                mainNav.classList.remove('search-active');
+                searchInput.value = '';
+            } else if (e.key === 'Enter') {
+                const query = searchInput.value.trim();
+                if (query) {
+                    console.log('Searching for:', query);
+                    // Perform search
+                    performSearch(query);
+                }
             }
         });
+
+        // Search functionality
+        function performSearch(query) {
+            console.log('Performing search for:', query);
+            
+            // Filter gallery images based on search query
+            const galleryImages = document.querySelectorAll('.gallery-canvas img');
+            let visibleCount = 0;
+            
+            galleryImages.forEach(img => {
+                const altText = img.alt.toLowerCase();
+                const srcText = img.src.toLowerCase();
+                
+                // Simple search logic - check if query matches alt text or filename
+                if (altText.includes(query.toLowerCase()) || 
+                    srcText.includes(query.toLowerCase())) {
+                    img.style.display = 'block';
+                    img.style.opacity = '1';
+                    visibleCount++;
+                } else {
+                    img.style.display = 'none';
+                    img.style.opacity = '0';
+                }
+            });
+            
+            // Show search results message
+            if (visibleCount === 0) {
+                console.log('No results found for:', query);
+            } else {
+                console.log(`Found ${visibleCount} results for:`, query);
+            }
+            
+            // Close search input after search
+            searchInputContainer.classList.remove('active');
+            mainNav.classList.remove('search-active');
+            searchInput.value = '';
+        }
 
         // Navigation handlers
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', (e) => {
-                e.preventDefault();
-                
+                // Remove active class from all items
                 document.querySelectorAll('.nav-item').forEach(navItem => {
                     navItem.classList.remove('active');
                 });
                 
+                // Add active class to clicked item
                 item.classList.add('active');
                 
-                const text = item.querySelector('span').textContent;
-                alert(`${text} functionality coming soon!`);
+                // Handle navigation based on the link
+                const href = item.getAttribute('href');
+                if (href === '#') {
+                    e.preventDefault();
+                    const text = item.querySelector('span');
+                    if (text && text.textContent === 'Discover') {
+                        // Navigate to Discover page
+                        window.location.href = '../discover/';
+                    } else if (text && text.textContent === 'Create') {
+                        // Create functionality (already handled by uploadBtn)
+                        return;
+                    } else if (item.id === 'profileBtn') {
+                        // Navigate to Profile Settings page
+                        window.location.href = '../profile/';
+                    } else if (text) {
+                        console.log(`${text.textContent} functionality coming soon!`);
+                    }
+                }
             });
         });
+
+        // Navigation Position Management
+        const mainNav = document.getElementById('mainNav');
+        const galleryMain = document.querySelector('.gallery-main');
+        
+        let currentPosition = localStorage.getItem('navPosition') || 'top';
+        
+        // Load saved position
+        setNavPosition(currentPosition);
+        
+        // Listen for navigation position changes from localStorage
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'navPosition' && e.newValue) {
+                setNavPosition(e.newValue);
+            }
+        });
+        
+        function setNavPosition(position) {
+            // Remove all position classes and margin classes
+            mainNav.classList.remove('nav-top', 'nav-bottom', 'nav-left', 'nav-right');
+            galleryMain.classList.remove('nav-left-active', 'nav-right-active', 'nav-bottom-active');
+            
+            // Add new position class to nav
+            if (position !== 'top') {
+                mainNav.classList.add(`nav-${position}`);
+            }
+            
+            // Add corresponding margin class to gallery-main
+            if (position === 'left' || position === 'right') {
+                galleryMain.classList.add(`nav-${position}-active`);
+            } else if (position === 'bottom') {
+                galleryMain.classList.add('nav-bottom-active');
+            }
+            
+            currentPosition = position;
+        }
+
+        // Brightness Detection Engine for Navigation Bar
+        class NavigationBrightnessAdapter {
+            constructor() {
+                this.nav = document.getElementById('mainNav');
+                this.navItems = this.nav.querySelectorAll('.nav-item');
+                this.threshold = 128; // 기준 명도값 (0-255)
+                this.updateInterval = null;
+                this.isActive = false;
+                this.init();
+            }
+
+            init() {
+                // 초기 색상 감지
+                this.detectAndUpdateColors();
+                
+                // 스크롤 이벤트 리스너
+                let scrollTimeout;
+                window.addEventListener('scroll', () => {
+                    clearTimeout(scrollTimeout);
+                    scrollTimeout = setTimeout(() => {
+                        this.detectAndUpdateColors();
+                    }, 16); // 60fps
+                });
+
+                // 리사이즈 이벤트 리스너
+                window.addEventListener('resize', () => {
+                    this.detectAndUpdateColors();
+                });
+
+                // 주기적 업데이트 (선택적)
+                this.updateInterval = setInterval(() => {
+                    this.detectAndUpdateColors();
+                }, 1000);
+            }
+
+            detectAndUpdateColors() {
+                if (!this.nav || !this.navItems.length) return;
+
+                this.navItems.forEach((item, index) => {
+                    const brightness = this.getBackgroundBrightness(item);
+                    this.updateItemColor(item, brightness);
+                });
+            }
+
+            getBackgroundBrightness(element) {
+                const rect = element.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+
+                // 요소 뒤의 배경 색상 감지
+                const elementsAtPoint = document.elementsFromPoint(centerX, centerY);
+                let maxBrightness = 0;
+                let detectedColor = '#1A1A1A'; // 기본값
+
+                elementsAtPoint.forEach(el => {
+                    if (el === this.nav || this.nav.contains(el)) return;
+
+                    const bgColor = this.getComputedBackgroundColor(el);
+                    const brightness = this.calculateBrightness(bgColor);
+                    
+                    if (brightness > maxBrightness) {
+                        maxBrightness = brightness;
+                        detectedColor = bgColor;
+                    }
+                });
+
+                return maxBrightness;
+            }
+
+            getComputedBackgroundColor(element) {
+                const computedStyle = window.getComputedStyle(element);
+                let bgColor = computedStyle.backgroundColor;
+
+                // 투명한 배경 처리
+                if (bgColor === 'rgba(0, 0, 0, 0)' || bgColor === 'transparent') {
+                    let parent = element.parentElement;
+                    while (parent && parent !== document.body) {
+                        const parentStyle = window.getComputedStyle(parent);
+                        if (parentStyle.backgroundColor !== 'rgba(0, 0, 0, 0)' && 
+                            parentStyle.backgroundColor !== 'transparent') {
+                            bgColor = parentStyle.backgroundColor;
+                            break;
+                        }
+                        parent = parent.parentElement;
+                    }
+                }
+
+                return bgColor || '#1A1A1A';
+            }
+
+            calculateBrightness(color) {
+                let r, g, b;
+
+                if (color.startsWith('#')) {
+                    const hex = color.replace('#', '');
+                    r = parseInt(hex.substr(0, 2), 16);
+                    g = parseInt(hex.substr(2, 2), 16);
+                    b = parseInt(hex.substr(4, 2), 16);
+                } else if (color.startsWith('rgb')) {
+                    const match = color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+                    if (match) {
+                        [, r, g, b] = match.map(Number);
+                    } else {
+                        return 0;
+                    }
+                } else {
+                    return 0;
+                }
+
+                // 개선된 명도 계산 - 중간 톤 처리 강화
+                const luminance = (r * 299 + g * 587 + b * 114) / 1000;
+                
+                // 대비 비율 계산 (0-1)
+                const contrast = Math.max(r, g, b) - Math.min(r, g, b);
+                const contrastRatio = contrast / 255;
+                
+                // 중간 톤에서 더 민감하게 반응하도록 가중치 적용
+                let adjustedLuminance = luminance;
+                
+                // 회색 계열 (낮은 대비) 감지
+                if (contrastRatio < 0.1) {
+                    // 순수 회색에 가까운 경우
+                    if (luminance > 180) {
+                        adjustedLuminance = 255; // 밝은 회색 → 밝게 처리
+                    } else if (luminance < 80) {
+                        adjustedLuminance = 0; // 어두운 회색 → 어둡게 처리
+                    } else {
+                        // 중간 회색은 약간 밝게 처리 (텍스트 가독성 우선)
+                        adjustedLuminance = luminance + 20;
+                    }
+            } else {
+                    // 컬러가 있는 경우 기존 계산 사용
+                    adjustedLuminance = luminance;
+                }
+                
+                return Math.min(255, Math.max(0, adjustedLuminance));
+            }
+
+            updateItemColor(item, brightness) {
+                // 개선된 임계값 처리 - 중간 톤에서 더 안정적인 판단
+                let isLight;
+                if (brightness > 140) {
+                    isLight = true; // 확실히 밝은 경우
+                } else if (brightness < 100) {
+                    isLight = false; // 확실히 어두운 경우
+                } else {
+                    // 중간 톤 (100-140)에서는 약간 보수적으로 밝게 처리
+                    isLight = brightness > 120;
+                }
+                
+                const textColor = isLight ? '#000000' : '#ffffff';
+                const logoFilter = isLight ? 'brightness(0)' : 'brightness(1)';
+
+                // 로고 아이템 처리
+                if (item.classList.contains('logo-item')) {
+                    const logo = item.querySelector('.nav-logo');
+                    if (logo) {
+                        logo.style.filter = logoFilter;
+                    }
+                }
+
+                // 텍스트 아이템 처리
+                const textSpan = item.querySelector('span');
+                if (textSpan) {
+                    textSpan.style.color = textColor;
+                }
+
+                // 아이템 자체 색상 설정
+                item.style.color = textColor;
+            }
+
+            destroy() {
+                if (this.updateInterval) {
+                    clearInterval(this.updateInterval);
+                }
+            }
+        }
+
+        // Initialize Brightness Detection Engine
+        document.addEventListener('DOMContentLoaded', () => {
+            window.navBrightnessAdapter = new NavigationBrightnessAdapter();
+            
+            // Profile Hover Modal Logic
+            const profileBtn = document.getElementById('profileBtn');
+            const profileHoverModal = document.getElementById('profileHoverModal');
+            let hoverTimeout;
+            let isModalHovered = false;
+            
+            // Load user info from localStorage
+            const userEmail = localStorage.getItem('userEmail') || 'user@abric.com';
+            const userName = localStorage.getItem('userName') || 'Abric User';
+            const userInitials = userName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'AB';
+            
+            // Update profile modal with user info
+            document.querySelector('.profile-hover-avatar').textContent = userInitials;
+            document.querySelector('.profile-hover-name').textContent = userName;
+            document.querySelector('.profile-hover-email').textContent = userEmail;
+            
+            // Show modal on profile button hover (Chrome compatible)
+            profileBtn.addEventListener('mouseenter', () => {
+                console.log('Profile button hovered');
+                clearTimeout(hoverTimeout);
+                hoverTimeout = setTimeout(() => {
+                    profileHoverModal.classList.add('show');
+                    console.log('Profile modal shown');
+                }, 100); // Reduced delay for Chrome
+            });
+            
+            // Also handle mouseover for Chrome compatibility
+            profileBtn.addEventListener('mouseover', () => {
+                console.log('Profile button mouseover');
+                clearTimeout(hoverTimeout);
+                hoverTimeout = setTimeout(() => {
+                    profileHoverModal.classList.add('show');
+                    console.log('Profile modal shown via mouseover');
+                }, 100);
+            });
+            
+            // Hide modal when leaving profile button
+            profileBtn.addEventListener('mouseleave', () => {
+                console.log('Profile button mouseleave');
+                clearTimeout(hoverTimeout);
+                hoverTimeout = setTimeout(() => {
+                    if (!isModalHovered) {
+                        profileHoverModal.classList.remove('show');
+                        console.log('Profile modal hidden');
+                    }
+                }, 200); // Reduced delay
+            });
+            
+            // Keep modal open when hovering over it
+            profileHoverModal.addEventListener('mouseenter', () => {
+                console.log('Modal hovered');
+                isModalHovered = true;
+                clearTimeout(hoverTimeout);
+            });
+            
+            profileHoverModal.addEventListener('mouseover', () => {
+                console.log('Modal mouseover');
+                isModalHovered = true;
+                clearTimeout(hoverTimeout);
+            });
+            
+            // Hide modal when leaving modal
+            profileHoverModal.addEventListener('mouseleave', () => {
+                console.log('Modal mouseleave');
+                isModalHovered = false;
+                hoverTimeout = setTimeout(() => {
+                    profileHoverModal.classList.remove('show');
+                    console.log('Profile modal hidden via modal leave');
+                }, 200);
+            });
+            
+            // Add click event for Chrome compatibility (fallback)
+            profileBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('Profile button clicked');
+                if (profileHoverModal.classList.contains('show')) {
+                    profileHoverModal.classList.remove('show');
+                    console.log('Profile modal hidden via click');
+                } else {
+                    profileHoverModal.classList.add('show');
+                    console.log('Profile modal shown via click');
+                }
+            });
+            
+            // Quick settings functionality using event delegation
+            document.addEventListener('change', (e) => {
+                console.log('Dropdown change detected:', e.target.id, e.target.value);
+                
+                if (e.target.id === 'quickImageDetailStyle') {
+                    console.log('Image detail style changed to:', e.target.value);
+                    localStorage.setItem('imageDetailStyle', e.target.value);
+                    // Trigger storage event for other tabs
+                    window.dispatchEvent(new StorageEvent('storage', {
+                        key: 'imageDetailStyle',
+                        newValue: e.target.value
+                    }));
+                    // Apply the style immediately
+                    setTimeout(() => {
+                        applyImageDetailStyle();
+                    }, 100);
+                }
+                
+                if (e.target.id === 'quickTheme') {
+                    console.log('Theme changed to:', e.target.value);
+                    localStorage.setItem('theme', e.target.value);
+                    document.body.setAttribute('data-theme', e.target.value);
+                }
+                
+                if (e.target.id === 'quickPrivacy') {
+                    console.log('Privacy changed to:', e.target.value);
+                    localStorage.setItem('privacy', e.target.value);
+                }
+            });
+            
+            // Load saved settings when modal is shown
+            profileBtn.addEventListener('mouseenter', () => {
+                setTimeout(() => {
+                    const quickImageDetailStyle = document.getElementById('quickImageDetailStyle');
+                    const quickTheme = document.getElementById('quickTheme');
+                    const quickPrivacy = document.getElementById('quickPrivacy');
+                    
+                    if (quickImageDetailStyle && localStorage.getItem('imageDetailStyle')) {
+                        quickImageDetailStyle.value = localStorage.getItem('imageDetailStyle');
+                    }
+                    if (quickTheme && localStorage.getItem('theme')) {
+                        quickTheme.value = localStorage.getItem('theme');
+                    }
+                    if (quickPrivacy && localStorage.getItem('privacy')) {
+                        quickPrivacy.value = localStorage.getItem('privacy');
+                    }
+                }, 150);
+            });
+            
+            // Sign out functionality using event delegation
+            document.addEventListener('click', (e) => {
+                if (e.target.id === 'signOutBtn') {
+                    console.log('Sign out button clicked');
+                    if (confirm('Are you sure you want to sign out?')) {
+                        // Clear user data
+                        localStorage.removeItem('userEmail');
+                        localStorage.removeItem('userName');
+                        // Redirect to sign in page
+                        window.location.href = '../auth/signin.html';
+                    }
+                }
+            });
+        });
+
+        // Pull-to-Refresh Engine for Desktop and Mobile
+        class PullToRefresh {
+            constructor() {
+                this.startY = 0;
+                this.currentY = 0;
+                this.startScrollTop = 0;
+                this.isDragging = false;
+                this.threshold = 150; // 리로드를 트리거하는 거리 (픽셀) - 더 높게 설정
+                this.resistance = 2.5; // 드래그 저항 (높을수록 드래그가 느려짐)
+                this.isRefreshing = false;
+                this.scrollContainer = document.querySelector('.gallery-main');
+                
+                // 관성 스크롤을 위한 변수
+                this.velocityY = 0;
+                this.lastY = 0;
+                this.lastTime = 0;
+                this.momentumId = null;
+                this.friction = 0.92; // 마찰 계수 (낮춰서 더 빨리 감속)
+                this.minVelocity = 0.1; // 최소 속도 (더 낮춰서 부드럽게 멈춤)
+                
+                // 드래그 스크롤 설정 (기본값: false)
+                this.dragScrollEnabled = localStorage.getItem('dragScrollEnabled') === 'true';
+                
+                this.init();
+                this.applyInitialSettings();
+            }
+
+            init() {
+                // 터치 이벤트 (모바일)
+                document.addEventListener('touchstart', (e) => this.onTouchStart(e), { passive: false });
+                document.addEventListener('touchmove', (e) => this.onTouchMove(e), { passive: false });
+                document.addEventListener('touchend', (e) => this.onTouchEnd(e), { passive: false });
+
+                // 마우스 이벤트 (데스크톱) - 드래그만 지원
+                document.addEventListener('mousedown', (e) => this.onMouseDown(e));
+                document.addEventListener('mousemove', (e) => this.onMouseMove(e));
+                document.addEventListener('mouseup', (e) => this.onMouseEnd(e));
+            }
+            
+            // 초기 설정 적용
+            applyInitialSettings() {
+                if (this.dragScrollEnabled) {
+                    document.body.classList.add('drag-scroll-enabled');
+                }
+            }
+
+            isAtTop() {
+                return this.scrollContainer ? this.scrollContainer.scrollTop <= 0 : window.scrollY <= 0;
+            }
+
+            // 터치 시작
+            onTouchStart(e) {
+                if (this.isRefreshing) return;
+                
+                // 진행 중인 관성 스크롤 중지
+                this.stopMomentum();
+                
+                this.startY = e.touches[0].clientY;
+                this.isDragging = true;
+                this.lastY = e.touches[0].clientY;
+                this.lastTime = Date.now();
+                this.velocityY = 0;
+            }
+
+            // 터치 이동
+            onTouchMove(e) {
+                if (!this.isDragging || this.isRefreshing) return;
+                
+                const currentTime = Date.now();
+                const timeDelta = currentTime - this.lastTime;
+                
+                this.currentY = e.touches[0].clientY;
+                const moveDelta = this.currentY - this.lastY;
+                
+                // 속도 계산
+                if (timeDelta > 0) {
+                    this.velocityY = moveDelta / timeDelta;
+                }
+                
+                this.lastY = this.currentY;
+                this.lastTime = currentTime;
+                
+                const deltaY = (this.currentY - this.startY) / this.resistance;
+                
+                // 최상단에서 아래로 당길 때만 리프레시 인디케이터 표시
+                if (deltaY > 0 && this.isAtTop()) {
+                    e.preventDefault();
+                    this.updateVisualFeedback(deltaY);
+                }
+            }
+
+            // 터치 종료
+            onTouchEnd(e) {
+                if (!this.isDragging) return;
+                
+                const deltaY = (this.currentY - this.startY) / this.resistance;
+                
+                if (deltaY > this.threshold && this.isAtTop()) {
+                    this.triggerRefresh();
+                } else {
+                    this.resetVisualFeedback();
+                    
+                    // 관성 스크롤 시작 (속도가 충분히 클 때만)
+                    if (Math.abs(this.velocityY) > this.minVelocity && !this.isAtTop()) {
+                        this.startMomentum();
+                    }
+                }
+                
+                this.isDragging = false;
+                this.startY = 0;
+                this.currentY = 0;
+            }
+
+            // 마우스 다운
+            onMouseDown(e) {
+                if (this.isRefreshing) return;
+                
+                // 드래그 스크롤이 비활성화되어 있으면 Pull-to-Refresh만 작동
+                if (!this.dragScrollEnabled && !this.isAtTop()) {
+                    return;
+                }
+                
+                // 진행 중인 관성 스크롤 중지
+                this.stopMomentum();
+                
+                this.startY = e.clientY;
+                this.startScrollTop = this.scrollContainer ? this.scrollContainer.scrollTop : window.scrollY;
+                this.isDragging = true;
+                this.currentY = e.clientY;
+                this.lastY = e.clientY;
+                this.lastTime = Date.now();
+                this.velocityY = 0;
+                
+                // 드래그 중 텍스트 선택 방지
+                e.preventDefault();
+                if (this.dragScrollEnabled) {
+                    document.body.style.userSelect = 'none';
+                    document.body.style.cursor = 'grabbing';
+                }
+            }
+
+            // 마우스 이동
+            onMouseMove(e) {
+                if (!this.isDragging || this.isRefreshing) return;
+                
+                const currentTime = Date.now();
+                const timeDelta = currentTime - this.lastTime;
+                
+                this.currentY = e.clientY;
+                const deltaY = this.currentY - this.startY;
+                const moveDelta = this.currentY - this.lastY;
+                
+                // 속도 계산 (픽셀/밀리초)
+                if (timeDelta > 0) {
+                    this.velocityY = moveDelta / timeDelta;
+                }
+                
+                this.lastY = this.currentY;
+                this.lastTime = currentTime;
+                
+                // 드래그 스크롤이 활성화되어 있을 때만 스크롤 적용
+                if (this.dragScrollEnabled) {
+                    const newScrollTop = this.startScrollTop - deltaY;
+                    
+                    if (this.scrollContainer) {
+                        this.scrollContainer.scrollTop = newScrollTop;
+                    } else {
+                        window.scrollTo(0, newScrollTop);
+                    }
+                }
+                
+                // 최상단에서 위로 드래그할 때만 리프레시 인디케이터 표시
+                if (this.isAtTop() && deltaY > 0) {
+                    const adjustedDeltaY = deltaY / this.resistance;
+                    this.updateVisualFeedback(adjustedDeltaY);
+                } else if (this.refreshIndicator) {
+                    this.hideRefreshIndicator();
+                    this.resetBodyTransform();
+                }
+            }
+
+            // 마우스 업
+            onMouseEnd(e) {
+                if (!this.isDragging) return;
+                
+                const deltaY = (this.currentY - this.startY) / this.resistance;
+                
+                // 최상단에서 충분히 아래로 드래그했을 때만 리프레시
+                if (deltaY > this.threshold && this.isAtTop()) {
+                    this.triggerRefresh();
+                } else {
+                    this.resetVisualFeedback();
+                    
+                    // 드래그 스크롤이 활성화되어 있을 때만 관성 스크롤 시작
+                    if (this.dragScrollEnabled && Math.abs(this.velocityY) > this.minVelocity) {
+                        this.startMomentum();
+                    }
+                }
+                
+                this.isDragging = false;
+                this.startY = 0;
+                this.currentY = 0;
+                this.startScrollTop = 0;
+                
+                // 스타일 복원
+                document.body.style.userSelect = '';
+                document.body.style.cursor = '';
+            }
+            
+            // 드래그 스크롤 활성화/비활성화 토글
+            toggleDragScroll(enabled) {
+                this.dragScrollEnabled = enabled;
+                localStorage.setItem('dragScrollEnabled', enabled);
+                
+                // body 클래스 업데이트
+                if (enabled) {
+                    document.body.classList.add('drag-scroll-enabled');
+                } else {
+                    document.body.classList.remove('drag-scroll-enabled');
+                }
+            }
+            
+            // 현재 드래그 스크롤 상태 반환
+            isDragScrollEnabled() {
+                return this.dragScrollEnabled;
+            }
+            
+            // body transform만 리셋 (스크롤은 유지)
+            resetBodyTransform() {
+                document.body.style.transform = '';
+            }
+            
+            // 관성 스크롤 시작
+            startMomentum() {
+                this.stopMomentum();
+                
+                const animate = () => {
+                    // 속도가 최소값 이하로 떨어지면 부드럽게 멈춤
+                    if (Math.abs(this.velocityY) < this.minVelocity) {
+                        // 완전히 멈추기 전에 천천히 멈추도록
+                        this.velocityY *= 0.5;
+                        if (Math.abs(this.velocityY) < 0.01) {
+                            this.stopMomentum();
+                            return;
+                        }
+                    }
+                    
+                    // 현재 스크롤 위치 가져오기
+                    const currentScroll = this.scrollContainer ? this.scrollContainer.scrollTop : window.scrollY;
+                    const maxScroll = this.scrollContainer ? 
+                        this.scrollContainer.scrollHeight - this.scrollContainer.clientHeight :
+                        document.documentElement.scrollHeight - window.innerHeight;
+                    
+                    // 속도를 픽셀로 변환 (밀리초당 -> 프레임당, 약 16ms 가정)
+                    const scrollDelta = -this.velocityY * 16;
+                    let newScroll = currentScroll + scrollDelta;
+                    
+                    // 경계 감지 및 부드러운 감속
+                    const boundaryThreshold = 200; // 경계 근처 200px부터 감속 시작 (더 넓게)
+                    let boundaryFriction = 1;
+                    
+                    if (newScroll < boundaryThreshold && this.velocityY < 0) {
+                        // 최상단 근처에서 위로 스크롤 - ease-out 곡선 사용
+                        const proximity = 1 - (newScroll / boundaryThreshold);
+                        const easedProximity = 1 - Math.pow(1 - proximity, 3); // cubic ease-out
+                        boundaryFriction = 0.95 - (easedProximity * 0.45); // 0.95 -> 0.5로 부드럽게 감속
+                        
+                        if (newScroll < 0) {
+                            newScroll = 0;
+                            this.velocityY *= 0.5; // 경계 도달 시 더 부드럽게
+                        }
+                    } else if (newScroll > maxScroll - boundaryThreshold && this.velocityY > 0) {
+                        // 최하단 근처에서 아래로 스크롤 - ease-out 곡선 사용
+                        const proximity = (newScroll - (maxScroll - boundaryThreshold)) / boundaryThreshold;
+                        const easedProximity = 1 - Math.pow(1 - proximity, 3); // cubic ease-out
+                        boundaryFriction = 0.95 - (easedProximity * 0.45); // 0.95 -> 0.5로 부드럽게 감속
+                        
+                        if (newScroll > maxScroll) {
+                            newScroll = maxScroll;
+                            this.velocityY *= 0.5; // 경계 도달 시 더 부드럽게
+                        }
+                    }
+                    
+                    // 스크롤 적용
+                    if (this.scrollContainer) {
+                        this.scrollContainer.scrollTop = newScroll;
+                    } else {
+                        window.scrollTo(0, newScroll);
+                    }
+                    
+                    // 마찰 적용 (경계 근처에서는 추가 감속, 더 부드러운 감속 곡선)
+                    const currentFriction = this.friction * boundaryFriction;
+                    
+                    // 속도가 낮을 때 추가 감속 (부드러운 정지를 위해)
+                    const velocityBasedFriction = Math.abs(this.velocityY) < 1 ? 0.85 : 1;
+                    
+                    this.velocityY *= currentFriction * velocityBasedFriction;
+                    
+                    // 다음 프레임 요청
+                    this.momentumId = requestAnimationFrame(animate);
+                };
+                
+                this.momentumId = requestAnimationFrame(animate);
+            }
+            
+            // 관성 스크롤 중지
+            stopMomentum() {
+                if (this.momentumId) {
+                    cancelAnimationFrame(this.momentumId);
+                    this.momentumId = null;
+                }
+            }
+
+            // 시각적 피드백 업데이트
+            updateVisualFeedback(deltaY) {
+                const progress = Math.min(deltaY / this.threshold, 1);
+                
+                // 페이지 전체에 시각적 피드백
+                document.body.style.transform = `translateY(${deltaY * 0.3}px)`;
+                document.body.style.transition = 'none';
+                
+                // 오버레이 표시
+                if (!this.refreshIndicator) {
+                    this.createRefreshIndicator();
+                }
+                
+                // 프로그레스에 따라 인디케이터 표시
+                this.showRefreshIndicator(progress);
+            }
+            
+            // 리프레시 인디케이터 표시
+            showRefreshIndicator(progress) {
+                if (!this.refreshIndicator) {
+                    this.createRefreshIndicator();
+                }
+                
+                const opacity = Math.min(progress, 1);
+                const scale = 0.8 + (progress * 0.2); // 0.8에서 1.0으로 증가
+                
+                this.refreshIndicator.style.opacity = opacity;
+                this.refreshIndicator.style.transform = `translateX(-50%) scale(${scale})`;
+                
+                // 프로그레스에 따라 네모 회전 조정
+                if (this.spinnerSVG) {
+                    const rotatingSquare = this.spinnerSVG.querySelector('#rotatingSquare');
+                    const rollingA = this.spinnerSVG.querySelector('#rollingA');
+                    
+                    if (rotatingSquare && rollingA && progress < 1) {
+                        // 프로그레스가 1 미만일 때는 회전 각도를 프로그레스에 맞춤
+                        const angle = progress * 360;
+                        rotatingSquare.setAttribute('transform', `rotate(${angle} 24 24)`);
+                        rollingA.setAttribute('transform', `rotate(${-angle} 24 24)`);
+                        
+                        // 애니메이션 중지
+                        const squareAnim = rotatingSquare.querySelector('animateTransform');
+                        const aAnim = rollingA.querySelector('animateTransform');
+                        if (squareAnim) squareAnim.setAttribute('repeatCount', '0');
+                        if (aAnim) aAnim.setAttribute('repeatCount', '0');
+                    } else if (progress >= 1) {
+                        // 100% 도달 시 애니메이션 재시작
+                        const squareAnim = rotatingSquare?.querySelector('animateTransform');
+                        const aAnim = rollingA?.querySelector('animateTransform');
+                        if (squareAnim) {
+                            squareAnim.setAttribute('repeatCount', 'indefinite');
+                            squareAnim.beginElement();
+                        }
+                        if (aAnim) {
+                            aAnim.setAttribute('repeatCount', 'indefinite');
+                            aAnim.beginElement();
+                        }
+                    }
+                }
+            }
+            
+            // 리프레시 인디케이터 숨기기
+            hideRefreshIndicator() {
+                if (this.refreshIndicator && !this.isRefreshing) {
+                    this.refreshIndicator.style.opacity = '0';
+                    this.refreshIndicator.style.transform = 'translateX(-50%) scale(0.8)';
+                }
+            }
+
+            // 리프레시 인디케이터 생성
+            createRefreshIndicator() {
+                this.refreshIndicator = document.createElement('div');
+                this.refreshIndicator.style.position = 'fixed';
+                this.refreshIndicator.style.top = '100px';
+                this.refreshIndicator.style.left = '50%';
+                this.refreshIndicator.style.transform = 'translateX(-50%) scale(0.8)';
+                this.refreshIndicator.style.zIndex = '10001';
+                this.refreshIndicator.style.opacity = '0';
+                this.refreshIndicator.style.pointerEvents = 'none';
+                this.refreshIndicator.style.width = '40px';
+                this.refreshIndicator.style.height = '40px';
+                this.refreshIndicator.style.display = 'flex';
+                this.refreshIndicator.style.alignItems = 'center';
+                this.refreshIndicator.style.justifyContent = 'center';
+                this.refreshIndicator.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                this.refreshIndicator.style.mixBlendMode = 'difference';
+                
+                // iOS 스타일 스피너 생성
+                this.createIOSSpinner();
+                
+                document.body.appendChild(this.refreshIndicator);
+            }
+            
+            // Abric 스타일 스피너 생성 - 회전하는 네모 안에 굴러가는 A
+            createIOSSpinner() {
+                const spinnerSVG = `
+                    <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <clipPath id="squareClip">
+                                <rect x="8" y="8" width="32" height="32" rx="0"/>
+                            </clipPath>
+                        </defs>
+                        <!-- 회전하는 날카로운 네모 -->
+                        <g id="rotatingSquare">
+                            <rect x="8" y="8" width="32" height="32" 
+                                  fill="none" 
+                                  stroke="#ffffff" 
+                                  stroke-width="2.5"
+                                  rx="0"/>
+                            <animateTransform
+                                attributeName="transform"
+                                type="rotate"
+                                from="0 24 24"
+                                to="360 24 24"
+                                dur="2s"
+                                repeatCount="indefinite"/>
+                        </g>
+                        <!-- 중력으로 굴러가는 A (네모 안에서 제한) -->
+                        <g clip-path="url(#squareClip)">
+                            <text id="rollingA" 
+                                  x="24" 
+                                  y="31" 
+                                  font-family="Abel, sans-serif" 
+                                  font-size="20" 
+                                  font-weight="bold"
+                                  fill="#ffffff" 
+                                  text-anchor="middle"
+                                  dominant-baseline="middle">A
+                                <!-- A가 중력에 따라 네모의 회전에 반대로 회전 (항상 아래로 떨어지는 효과) -->
+                                <animateTransform
+                                    attributeName="transform"
+                                    type="rotate"
+                                    from="0 24 24"
+                                    to="-360 24 24"
+                                    dur="2s"
+                                    repeatCount="indefinite"/>
+                            </text>
+                        </g>
+                    </svg>
+                `;
+                this.refreshIndicator.innerHTML = spinnerSVG;
+                this.spinnerSVG = this.refreshIndicator.querySelector('svg');
+                this.refreshIndicator.style.width = '48px';
+                this.refreshIndicator.style.height = '48px';
+            }
+
+            // 시각적 피드백 리셋
+            resetVisualFeedback() {
+                document.body.style.transform = '';
+                document.body.style.transition = 'transform 0.3s ease';
+                
+                this.hideRefreshIndicator();
+                
+                setTimeout(() => {
+                    document.body.style.transition = '';
+                }, 300);
+            }
+
+            // 리프레시 트리거
+            triggerRefresh() {
+                if (this.isRefreshing) return;
+                
+                this.isRefreshing = true;
+                
+                // 리프레시 애니메이션 - 네모와 A 계속 회전
+                if (this.refreshIndicator && this.spinnerSVG) {
+                    this.refreshIndicator.style.opacity = '1';
+                    this.refreshIndicator.style.transform = 'translateX(-50%) scale(1)';
+                    
+                    const rotatingSquare = this.spinnerSVG.querySelector('#rotatingSquare');
+                    const rollingA = this.spinnerSVG.querySelector('#rollingA');
+                    
+                    const squareAnim = rotatingSquare?.querySelector('animateTransform');
+                    const aAnim = rollingA?.querySelector('animateTransform');
+                    
+                    if (squareAnim) {
+                        squareAnim.setAttribute('repeatCount', 'indefinite');
+                        squareAnim.beginElement();
+                    }
+                    if (aAnim) {
+                        aAnim.setAttribute('repeatCount', 'indefinite');
+                        aAnim.beginElement();
+                    }
+                }
+                
+                // 페이지 리로드
+                setTimeout(() => {
+                    window.location.reload();
+                }, 600);
+            }
+
+            destroy() {
+                if (this.refreshIndicator) {
+                    this.refreshIndicator.remove();
+                }
+            }
+        }
+
+        // Initialize Pull-to-Refresh
+        document.addEventListener('DOMContentLoaded', () => {
+            window.pullToRefresh = new PullToRefresh();
+        });
+
+    </script>
+
+    <!-- Image Detail Modal -->
+    <div id="imageModal" class="image-modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <!-- Close Button -->
+            <button class="modal-close" id="modalClose">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
+            <!-- Navigation Arrows -->
+            <button class="modal-nav modal-nav-prev" id="modalPrev">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15,18 9,12 15,6"></polyline>
+                </svg>
+            </button>
+            <button class="modal-nav modal-nav-next" id="modalNext">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9,18 15,12 9,6"></polyline>
+                </svg>
+            </button>
+
+            <!-- Main Content -->
+            <div class="modal-main">
+                <!-- Image Section -->
+                <div class="modal-image-section">
+                    <div class="modal-image-container">
+                        <img id="modalImage" src="" alt="Gallery Image">
+                        <div class="modal-image-overlay">
+                            <div class="modal-image-info">
+                                <div class="modal-user-info">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                                    </svg>
+                                    <span id="modalUser">@user</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Color Palette -->
+                    <div class="modal-color-palette">
+                        <div class="color-swatch" style="background: #DFFF00;"></div>
+                        <div class="color-swatch" style="background: #7FFF00;"></div>
+                        <div class="color-swatch" style="background: #1A3029;"></div>
+                    </div>
+
+                    <!-- View Similar Button -->
+                    <button class="modal-view-similar">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                            <circle cx="12" cy="13" r="4"></circle>
+                        </svg>
+                        View Similar
+                    </button>
+                </div>
+
+                <!-- Info Section -->
+                <div class="modal-info-section">
+                    <!-- Header Controls -->
+                    <div class="modal-header-controls">
+                        <button class="modal-menu-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="1"></circle>
+                                <circle cx="19" cy="12" r="1"></circle>
+                                <circle cx="5" cy="12" r="1"></circle>
+                            </svg>
+                        </button>
+                        <select class="modal-collection-select">
+                            <option>Add to Collection</option>
+                            <option>Create New Collection</option>
+                        </select>
+                        <button class="modal-save-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20,6 9,17 4,12"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Image Details -->
+                    <div class="modal-details">
+                        <div class="modal-date" id="modalDate">OCT. 29, 2023</div>
+                        <div class="modal-description" id="modalDescription">
+                            Letter O mark for a tech brand. Interested in working with me send a dm or email to...
+                        </div>
+                        <div class="modal-source" id="modalSource">@designvogue_ on Instagram</div>
+                    </div>
+
+                    <!-- Connections -->
+                    <div class="modal-connections">
+                        <h3>32 Connections</h3>
+                        <div class="connections-list">
+                            <div class="connection-item">
+                                <div class="connection-icon">ig</div>
+                                <div class="connection-info">
+                                    <div class="connection-name">ig</div>
+                                    <div class="connection-meta">6.9K elements · @eloykrioka</div>
+                                </div>
+                                <div class="connection-badge">1st</div>
+                            </div>
+                            <div class="connection-item">
+                                <div class="connection-icon">sanctum</div>
+                                <div class="connection-info">
+                                    <div class="connection-name">sanctum</div>
+                                    <div class="connection-meta">125 elements · @cleonw</div>
+                                </div>
+                            </div>
+                            <div class="connection-item">
+                                <div class="connection-icon">Work stuffz</div>
+                                <div class="connection-info">
+                                    <div class="connection-name">Work stuffz</div>
+                                    <div class="connection-meta">40 elements · @daniellinder</div>
+                                </div>
+                            </div>
+                            <div class="connection-item">
+                                <div class="connection-icon">OUTDOORS UNIT X</div>
+                                <div class="connection-info">
+                                    <div class="connection-name">OUTDOORS UNIT X</div>
+                                    <div class="connection-meta">115 elements · @nimnom</div>
+                                </div>
+                            </div>
+                            <div class="connection-item">
+                                <div class="connection-icon">symbols</div>
+                                <div class="connection-info">
+                                    <div class="connection-name">symbols</div>
+                                    <div class="connection-meta">84 elements · @jesusmontero</div>
+                                </div>
+                            </div>
+                            <div class="connection-item">
+                                <div class="connection-icon">investorAI</div>
+                                <div class="connection-info">
+                                    <div class="connection-name">investorAI</div>
+                                    <div class="connection-meta">48 elements · @salomerard</div>
+                                </div>
+                            </div>
+                            <div class="connection-item">
+                                <div class="connection-icon">J3F</div>
+                                <div class="connection-info">
+                                    <div class="connection-name">J3F</div>
+                                    <div class="connection-meta">44 elements · @rsj3f</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Image Modal Functionality
+        class ImageModal {
+            constructor() {
+                this.modal = document.getElementById('imageModal');
+                this.modalImage = document.getElementById('modalImage');
+                this.modalUser = document.getElementById('modalUser');
+                this.modalDate = document.getElementById('modalDate');
+                this.modalDescription = document.getElementById('modalDescription');
+                this.modalSource = document.getElementById('modalSource');
+                this.modalClose = document.getElementById('modalClose');
+                this.modalPrev = document.getElementById('modalPrev');
+                this.modalNext = document.getElementById('modalNext');
+                
+                this.currentImageIndex = 0;
+                this.images = [];
+                this.currentImageData = null;
+                this.setupEventListeners();
+            }
+
+            setupEventListeners() {
+                // Global keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (!this.modal.classList.contains('active')) return;
+                    
+                    switch(e.key) {
+                        case 'Escape':
+                            this.close();
+                            break;
+                        case 'ArrowLeft':
+                            this.previousImage();
+                            break;
+                        case 'ArrowRight':
+                            this.nextImage();
+                            break;
+                    }
+                });
+                
+                // Backdrop click to close
+                this.modal.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('modal-backdrop')) {
+                        this.close();
+                    }
+                });
+            }
+
+            open(imageData, imageIndex, allImages) {
+                this.images = allImages;
+                this.currentImageIndex = imageIndex;
+                this.currentImageData = imageData;
+                
+                // Show modal first
+                this.modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                
+                // Apply current image detail style (this will rebuild the modal content)
+                applyImageDetailStyle();
+                
+                // Update navigation visibility
+                this.updateNavigation();
+            }
+
+            close() {
+                this.modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            previousImage() {
+                if (this.currentImageIndex > 0) {
+                    this.currentImageIndex--;
+                    this.updateImage();
+                }
+            }
+
+            nextImage() {
+                if (this.currentImageIndex < this.images.length - 1) {
+                    this.currentImageIndex++;
+                    this.updateImage();
+                }
+            }
+
+            updateImage() {
+                const imageData = this.images[this.currentImageIndex];
+                if (imageData) {
+                    this.currentImageData = imageData;
+                    // Rebuild modal content with new image data
+                    applyImageDetailStyle();
+                }
+                this.updateNavigation();
+            }
+
+            updateNavigation() {
+                // Update navigation for all layout types
+                const prevButtons = document.querySelectorAll('.arena-prev, .modal-nav.prev');
+                const nextButtons = document.querySelectorAll('.arena-next, .modal-nav.next');
+                
+                prevButtons.forEach(btn => {
+                    btn.style.display = this.currentImageIndex > 0 ? 'flex' : 'none';
+                });
+                nextButtons.forEach(btn => {
+                    btn.style.display = this.currentImageIndex < this.images.length - 1 ? 'flex' : 'none';
+                });
+            }
+        }
+
+        // Collection Management
+        class CollectionManager {
+            constructor() {
+                this.collections = JSON.parse(localStorage.getItem('userCollections') || '[]');
+                this.setupEventListeners();
+            }
+
+            setupEventListeners() {
+                // Collection select change
+                document.addEventListener('change', (e) => {
+                    if (e.target.classList.contains('modal-collection-select')) {
+                        this.handleCollectionSelect(e.target);
+                    }
+                });
+
+                // Save button click
+                document.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('modal-save-btn')) {
+                        this.saveToCollection();
+                    }
+                });
+            }
+
+            handleCollectionSelect(select) {
+                if (select.value === 'Create New Collection') {
+                    this.showCreateCollectionDialog();
+                }
+            }
+
+            showCreateCollectionDialog() {
+                const collectionName = prompt('Enter collection name:');
+                if (collectionName && collectionName.trim()) {
+                    this.createCollection(collectionName.trim());
+                }
+            }
+
+            createCollection(name) {
+                const newCollection = {
+                    id: Date.now().toString(),
+                    name: name,
+                    images: [],
+                    createdAt: new Date().toISOString()
+                };
+                
+                this.collections.push(newCollection);
+                this.saveCollections();
+                this.updateCollectionSelect();
+                
+                // Select the new collection
+                const select = document.querySelector('.modal-collection-select');
+                select.value = newCollection.id;
+            }
+
+            saveToCollection() {
+                const select = document.querySelector('.modal-collection-select');
+                const collectionId = select.value;
+                
+                if (!collectionId || collectionId === 'Add to Collection') {
+                    alert('Please select a collection first');
+                    return;
+                }
+
+                const collection = this.collections.find(c => c.id === collectionId);
+                if (!collection) return;
+
+                const modalImage = document.getElementById('modalImage');
+                const modalUser = document.getElementById('modalUser');
+                const modalDescription = document.getElementById('modalDescription');
+                const modalSource = document.getElementById('modalSource');
+
+                const imageData = {
+                    src: modalImage.src,
+                    user: modalUser.textContent,
+                    description: modalDescription.textContent,
+                    source: modalSource.textContent,
+                    savedAt: new Date().toISOString()
+                };
+
+                // Check if image already exists in collection
+                const existingIndex = collection.images.findIndex(img => img.src === imageData.src);
+                if (existingIndex >= 0) {
+                    alert('Image already exists in this collection');
+                    return;
+                }
+
+                collection.images.push(imageData);
+                this.saveCollections();
+                
+                // Show success feedback
+                const saveBtn = document.querySelector('.modal-save-btn');
+                const originalHTML = saveBtn.innerHTML;
+                saveBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"></polyline></svg>';
+                saveBtn.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    saveBtn.innerHTML = originalHTML;
+                    saveBtn.style.background = '#007AFF';
+                }, 2000);
+            }
+
+            updateCollectionSelect() {
+                const select = document.querySelector('.modal-collection-select');
+                if (!select) return;
+
+                // Clear existing options except the first one
+                select.innerHTML = '<option>Add to Collection</option><option>Create New Collection</option>';
+                
+                // Add existing collections
+                this.collections.forEach(collection => {
+                    const option = document.createElement('option');
+                    option.value = collection.id;
+                    option.textContent = `${collection.name} (${collection.images.length})`;
+                    select.appendChild(option);
+                });
+            }
+
+            saveCollections() {
+                localStorage.setItem('userCollections', JSON.stringify(this.collections));
+            }
+
+            getCollections() {
+                return this.collections;
+            }
+        }
+
+        // Image Detail Style Management
+        function initializeImageDetailStyle() {
+            // Apply initial style
+            applyImageDetailStyle();
+            
+            // Listen for style changes from other tabs
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'imageDetailStyle') {
+                    applyImageDetailStyle();
+                }
+            });
+        }
+        
+        function applyImageDetailStyle() {
+            const currentStyle = localStorage.getItem('imageDetailStyle') || 'default';
+            const modal = document.querySelector('.image-modal');
+            
+            if (!modal) {
+                console.log('Modal not found');
+                return;
+            }
+            
+            console.log('Applying style:', currentStyle);
+            
+            // Remove all existing style classes
+            modal.classList.remove(
+                'image-detail-style-cosmos',
+                'image-detail-style-arena'
+            );
+            
+            // Apply new style class
+            if (currentStyle !== 'default') {
+                modal.classList.add(`image-detail-style-${currentStyle}`);
+                console.log('Added class:', `image-detail-style-${currentStyle}`);
+            }
+            
+            // Rebuild modal content based on style
+            rebuildModalContent(currentStyle);
+        }
+        
+        function rebuildModalContent(style) {
+            const modal = document.querySelector('.image-modal');
+            
+            if (!modal || !window.imageModal.currentImageData) {
+                console.log('Modal or image data not found for rebuild');
+                return;
+            }
+            
+            console.log('Rebuilding modal content with style:', style);
+            const imageData = window.imageModal.currentImageData;
+            
+            // Convert imageData format to match expected structure
+            const formattedImageData = {
+                imageSrc: imageData.src || imageData.imageSrc,
+                title: imageData.title || imageData.user || 'Untitled',
+                author: imageData.author || imageData.user || 'Unknown',
+                date: imageData.date || 'Unknown date',
+                description: imageData.description || 'No description available',
+                source: imageData.source || 'Unknown source',
+                connections: imageData.connections || []
+            };
+            
+            switch(style) {
+                case 'cosmos':
+                    buildCosmosLayout(modal, formattedImageData);
+                    break;
+                case 'savee':
+                    buildDefaultLayout(modal, formattedImageData);
+                    break;
+                case 'arena':
+                    buildArenaLayout(modal, formattedImageData);
+                    break;
+                case 'pinterest':
+                    buildDefaultLayout(modal, formattedImageData);
+                    break;
+                default:
+                    buildDefaultLayout(modal, formattedImageData);
+            }
+        }
+        
+        function buildCosmosLayout(modal, imageData) {
+            modal.innerHTML = `
+                <div class="modal-backdrop"></div>
+                <div class="cosmos-layout">
+                    <div class="cosmos-image-container">
+                        <img src="${imageData.imageSrc}" alt="${imageData.title}" class="cosmos-main-image">
+                        <div class="cosmos-image-overlay">
+                            <div class="cosmos-image-actions">
+                                <button class="cosmos-view-similar">
+                                    <svg width="16" height="16" viewBox="0 0 16 16">
+                                        <rect x="2" y="2" width="3" height="3" fill="currentColor"/>
+                                        <rect x="7" y="2" width="3" height="3" fill="currentColor"/>
+                                        <rect x="12" y="2" width="2" height="3" fill="currentColor"/>
+                                        <rect x="2" y="7" width="3" height="3" fill="currentColor"/>
+                                        <rect x="7" y="7" width="3" height="3" fill="currentColor"/>
+                                        <rect x="12" y="7" width="2" height="3" fill="currentColor"/>
+                                    </svg>
+                                    View Similar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="cosmos-bottom-indicators">
+                            <div class="cosmos-indicator active"></div>
+                            <div class="cosmos-indicator"></div>
+                            <div class="cosmos-indicator"></div>
+                            <div class="cosmos-indicator"></div>
+                        </div>
+                    </div>
+                    <div class="cosmos-sidebar">
+                        <div class="cosmos-controls">
+                            <select class="cosmos-mood-select">
+                                <option>Mood</option>
+                                <option>Inspiration</option>
+                                <option>Reference</option>
+                                <option>Archive</option>
+                            </select>
+                            <button class="cosmos-add-btn">+</button>
+                        </div>
+                        <div class="cosmos-info">
+                            <div class="cosmos-date">${formatDate(imageData.date)}</div>
+                            <div class="cosmos-description">
+                                ${formatDescription(imageData.description)}
+                            </div>
+                            <div class="cosmos-source">${getSourceInfo(imageData)}</div>
+                        </div>
+                        <div class="cosmos-connections">
+                            <h3>${getSavedCount(imageData)} Connections</h3>
+                            ${getSavedCount(imageData) > 0 ? `
+                                <div class="cosmos-connection-list">
+                                    ${generateConnections(imageData)}
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                    <button class="cosmos-back">&lt;</button>
+                </div>
+            `;
+            setupCosmosEventListeners();
+        }
+        
+        
+        function buildArenaLayout(modal, imageData) {
+            modal.innerHTML = `
+                <div class="modal-backdrop"></div>
+                <div class="arena-layout">
+                    <div class="arena-image-section">
+                        <img src="${imageData.imageSrc}" alt="${imageData.title}" class="arena-main-image">
+                    </div>
+                    <div class="arena-info-section">
+                        <div class="arena-controls">
+                            <button class="arena-prev">&lt;</button>
+                            <button class="arena-next">&gt;</button>
+                            <button class="arena-close">&times;</button>
+                        </div>
+                        <div class="arena-content">
+                            <h1 class="arena-title">${imageData.title || 'Untitled'}</h1>
+                            <div class="arena-description">${imageData.description || 'No description'}</div>
+                            <div class="arena-meta">
+                                <div class="arena-meta-item">Added: ${formatRelativeDate(imageData.date)}</div>
+                                <div class="arena-meta-item">Modified: ${formatRelativeDate(imageData.date)}</div>
+                                <div class="arena-meta-item">By: ${imageData.author || 'Unknown'}</div>
+                                <div class="arena-meta-item">Dimensions: ${getImageDimensions(imageData)}</div>
+                            </div>
+                            <div class="arena-actions">
+                                <button class="arena-connect">Connect →</button>
+                                <select class="arena-actions-select">
+                                    <option>Actions</option>
+                                </select>
+                            </div>
+                            <div class="arena-tabs">
+                                <div class="arena-tab active">Connections (${getSavedCount(imageData)})</div>
+                                <div class="arena-tab">Comments</div>
+                            </div>
+                            <div class="arena-connections">
+                                <div class="arena-connections-header">All connections</div>
+                                ${generateArenaConnections(imageData)}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            setupArenaEventListeners();
+        }
+        
+        function buildDefaultLayout(modal, imageData) {
+            modal.innerHTML = `
+                <div class="modal-backdrop"></div>
+                <div class="modal-content">
+                    <div class="modal-image-section">
+                        <div class="modal-image-container">
+                            <img src="${imageData.imageSrc}" alt="${imageData.title}" class="modal-image">
+                            <div class="modal-image-overlay">
+                                <div class="modal-user-info">
+                                    <svg width="16" height="16" viewBox="0 0 16 16">
+                                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" fill="currentColor"/>
+                                    </svg>
+                                    <span>${formatAuthor(imageData.author)}</span>
+                                </div>
+                            </div>
+                            <div class="modal-view-similar">
+                                <svg width="16" height="16" viewBox="0 0 16 16">
+                                    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zM4.5 7.5a.5.5 0 0 1 0-1h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5z" fill="currentColor"/>
+                                </svg>
+                                View Similar
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-left-section">
+                        <div class="modal-content-details">
+                            <h3 class="details-title">Content Details</h3>
+                            <div class="visual-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Dimensions:</span>
+                                    <span class="detail-value">${getImageDimensions(imageData)}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Format:</span>
+                                    <span class="detail-value">${getImageFormat(imageData)}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Size:</span>
+                                    <span class="detail-value">${getImageSize(imageData)}</span>
+                                </div>
+                            </div>
+                            <div class="extracted-colors">
+                                <h4 class="colors-title">Extracted Colors</h4>
+                                <div class="color-palette">
+                                    <div class="color-item">
+                                        <div class="color-swatch" style="background: #ff6b6b;"></div>
+                                        <span class="color-code">#ff6b6b</span>
+                                    </div>
+                                    <div class="color-item">
+                                        <div class="color-swatch" style="background: #4ecdc4;"></div>
+                                        <span class="color-code">#4ecdc4</span>
+                                    </div>
+                                    <div class="color-item">
+                                        <div class="color-swatch" style="background: #45b7d1;"></div>
+                                        <span class="color-code">#45b7d1</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="added-date">
+                                <h4 class="date-title">Added Date</h4>
+                                <div class="date-info">
+                                    <span class="date-value">${formatDate(imageData.date)}</span>
+                                    <span class="date-relative">${formatRelativeDate(imageData.date)}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-saved-by">
+                            <h3 class="saved-title">Saved By</h3>
+                            <div class="saved-users">
+                                ${generateSavedByUsers(imageData)}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-right-section">
+                        <div class="modal-similar-content">
+                            <h3 class="similar-title">Similar Content</h3>
+                            <div class="similar-grid">
+                                ${generateSimilarContent(imageData)}
+                            </div>
+                        </div>
+                        <div class="modal-uploader-content">
+                            <h3 class="uploader-title">More from ${formatAuthor(imageData.author)}</h3>
+                            <div class="uploader-grid">
+                                ${generateUploaderContent(imageData)}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-info-section">
+                        <div class="modal-header-controls">
+                            <div class="modal-collection-controls">
+                                <select class="modal-collection-select">
+                                    <option>Add to Collection</option>
+                                    <option>Create New Collection</option>
+                                </select>
+                                <button class="modal-save-btn">Save</button>
+                            </div>
+                            <button class="modal-close">&times;</button>
+                        </div>
+                        <div class="modal-details">
+                            <div class="modal-description">${formatDescription(imageData.description)}</div>
+                            <div class="modal-source">${getSourceInfo(imageData)}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            setupDefaultEventListeners();
+        }
+
+        // Helper functions for data formatting
+        function formatDate(dateString) {
+            if (!dateString || dateString === 'Unknown date') {
+                return new Date().toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric', 
+                    year: 'numeric' 
+                }).toUpperCase();
+            }
+            
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric', 
+                    year: 'numeric' 
+                }).toUpperCase();
+            } catch (e) {
+                return dateString.toUpperCase();
+            }
+        }
+
+        function formatRelativeDate(dateString) {
+            if (!dateString || dateString === 'Unknown date') {
+                return 'Just now';
+            }
+            const now = new Date();
+            const date = new Date(dateString);
+            const diffInSeconds = Math.floor((now - date) / 1000);
+            
+            if (diffInSeconds < 60) return 'Just now';
+            if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+            if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+            if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)}d ago`;
+            return `${Math.floor(diffInSeconds / 2592000)}mo ago`;
+        }
+
+        function getImageDimensions(imageData) {
+            // Mock dimensions for now
+            return '1920 × 1080';
+        }
+
+        function getImageFormat(imageData) {
+            const src = imageData.imageSrc || '';
+            const extension = src.split('.').pop()?.toUpperCase();
+            return extension || 'JPG';
+        }
+
+        function getImageSize(imageData) {
+            // Mock size for now
+            return '2.4 MB';
+        }
+
+        function generateSavedByUsers(imageData) {
+            const mockUsers = [
+                { name: 'alex_chen', avatar: 'AC' },
+                { name: 'maria_garcia', avatar: 'MG' },
+                { name: 'john_doe', avatar: 'JD' },
+                { name: 'sarah_wilson', avatar: 'SW' },
+                { name: 'mike_brown', avatar: 'MB' }
+            ];
+            
+            return mockUsers.map(user => `
+                <div class="saved-user">
+                    <div class="user-avatar">${user.avatar}</div>
+                    <span class="user-name">${user.name}</span>
+                </div>
+            `).join('');
+        }
+
+        function generateSimilarContent(imageData) {
+            const mockSimilar = [
+                { id: '1', src: imageData.imageSrc, title: 'Similar Image 1' },
+                { id: '2', src: imageData.imageSrc, title: 'Similar Image 2' },
+                { id: '3', src: imageData.imageSrc, title: 'Similar Image 3' },
+                { id: '4', src: imageData.imageSrc, title: 'Similar Image 4' }
+            ];
+            
+            return mockSimilar.map(item => `
+                <div class="similar-item" onclick="openImageModal('${item.id}')">
+                    <img src="${item.src}" alt="${item.title}" class="similar-image">
+                </div>
+            `).join('');
+        }
+
+        function generateUploaderContent(imageData) {
+            const mockUploader = [
+                { id: '1', src: imageData.imageSrc, title: 'Uploader Image 1' },
+                { id: '2', src: imageData.imageSrc, title: 'Uploader Image 2' },
+                { id: '3', src: imageData.imageSrc, title: 'Uploader Image 3' },
+                { id: '4', src: imageData.imageSrc, title: 'Uploader Image 4' }
+            ];
+            
+            return mockUploader.map(item => `
+                <div class="uploader-item" onclick="openImageModal('${item.id}')">
+                    <img src="${item.src}" alt="${item.title}" class="uploader-image">
+                </div>
+            `).join('');
+        }
+
+        function formatAuthor(author) {
+            if (!author || author === 'Unknown') {
+                return '@unknown_user';
+            }
+            
+            // If already has @, return as is
+            if (author.startsWith('@')) {
+                return author;
+            }
+            
+            // Add @ if missing
+            return `@${author}`;
+        }
+
+        function formatRelativeDate(dateString) {
+            if (!dateString || dateString === 'Unknown date') {
+                return 'Recently';
+            }
+            
+            try {
+                const date = new Date(dateString);
+                const now = new Date();
+                const diffTime = Math.abs(now - date);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                if (diffDays < 7) {
+                    return `${diffDays} days ago`;
+                } else if (diffDays < 30) {
+                    const weeks = Math.floor(diffDays / 7);
+                    return `${weeks} week${weeks > 1 ? 's' : ''} ago`;
+                } else if (diffDays < 365) {
+                    const months = Math.floor(diffDays / 30);
+                    return `${months} month${months > 1 ? 's' : ''} ago`;
+                } else {
+                    const years = Math.floor(diffDays / 365);
+                    return `${years} year${years > 1 ? 's' : ''} ago`;
+                }
+            } catch (e) {
+                return 'Recently';
+            }
+        }
+
+        function getImageDimensions(imageData) {
+            // Try to get dimensions from image data
+            if (imageData.width && imageData.height) {
+                return `${imageData.width} x ${imageData.height}`;
+            }
+            
+            // Default dimensions
+            return '900 x 649';
+        }
+
+        function getSavedCount(imageData) {
+            // Check if there are actual saved users for this content
+            if (imageData.savedBy && Array.isArray(imageData.savedBy)) {
+                return imageData.savedBy.length;
+            }
+            
+            // For demo purposes, return 0 if no one has saved it
+            return 0;
+        }
+
+        function getSourceInfo(imageData) {
+            // Check for source information from database
+            if (imageData.source) {
+                return imageData.source;
+            }
+            
+            if (imageData.platform) {
+                return imageData.platform;
+            }
+            
+            if (imageData.user && imageData.user.includes('@')) {
+                return imageData.user;
+            }
+            
+            // Default fallback - format like "@life on Instagram"
+            const author = imageData.author || 'unknown';
+            return `@${author.toLowerCase().replace(/\s+/g, '')} on Instagram`;
+        }
+
+        function formatDescription(description) {
+            if (!description || description === 'No description available') {
+                return 'No description available';
+            }
+            
+            // Add emphasis to important terms (like locations, names, etc.)
+            let formatted = description;
+            
+            // Highlight common important terms
+            const importantTerms = [
+                'Empire State Building', 'New York City', 'Eliot Elisofon',
+                'Photo by', 'Photograph by', 'Image by',
+                'View of', 'Portrait of', 'Landscape of'
+            ];
+            
+            importantTerms.forEach(term => {
+                const regex = new RegExp(`(${term})`, 'gi');
+                formatted = formatted.replace(regex, '<strong>$1</strong>');
+            });
+            
+            return formatted;
+        }
+
+        function generateConnections(imageData) {
+            // Show actual users who saved this content
+            if (imageData.savedBy && Array.isArray(imageData.savedBy) && imageData.savedBy.length > 0) {
+                return imageData.savedBy.map(user => `
+                    <div class="cosmos-connection-item">
+                        <div class="cosmos-connection-left">
+                            <div class="cosmos-connection-icon">
+                                <div class="cosmos-icon-placeholder"></div>
+                            </div>
+                            <div class="cosmos-connection-content">
+                                <div class="cosmos-connection-title">${user.name || user.username || user}</div>
+                                <div class="cosmos-connection-meta">${user.collections ? user.collections.length : 0} elements • @${user.username || user}</div>
+                            </div>
+                        </div>
+                        <div class="cosmos-connection-check">✓</div>
+                    </div>
+                `).join('');
+            }
+            
+            // If no one has saved it, return empty string (connections list will be hidden)
+            return '';
+        }
+
+        function generateArenaConnections(imageData) {
+            // Show actual users who saved this content
+            if (imageData.savedBy && Array.isArray(imageData.savedBy) && imageData.savedBy.length > 0) {
+                const currentDate = new Date();
+                const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                              'July', 'August', 'September', 'October', 'November', 'December'];
+                
+                return `
+                    <div class="arena-connection-group">
+                        <div class="arena-connection-date">${months[currentDate.getMonth()]} ${currentDate.getFullYear()}</div>
+                        ${imageData.savedBy.map(user => `
+                            <div class="arena-connection-item">${user.name || user.username || user}: ${imageData.author || 'Unknown'}</div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            
+            // If no one has saved it, return empty string
+            return '';
+        }
+
+        // Event Listeners for each layout
+        function setupCosmosEventListeners() {
+            const backBtn = document.querySelector('.cosmos-back');
+            if (backBtn) {
+                backBtn.addEventListener('click', () => window.imageModal.close());
+            }
+        }
+        
+        
+        function setupArenaEventListeners() {
+            const closeBtn = document.querySelector('.arena-close');
+            const prevBtn = document.querySelector('.arena-prev');
+            const nextBtn = document.querySelector('.arena-next');
+            
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => window.imageModal.close());
+            }
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => window.imageModal.previousImage());
+            }
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => window.imageModal.nextImage());
+            }
+        }
+        
+        
+        function setupDefaultEventListeners() {
+            const closeBtn = document.querySelector('.modal-close');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => window.imageModal.close());
+            }
+        }
+
+        // Initialize modal and collection manager
+        window.imageModal = new ImageModal();
+        window.collectionManager = new CollectionManager();
+        
+        // Initialize image detail style
+        initializeImageDetailStyle();
+        
+        // Update collection select and apply image detail style when modal opens
+        const originalOpen = window.imageModal.open;
+        window.imageModal.open = function(imageData, imageIndex, allImages) {
+            originalOpen.call(this, imageData, imageIndex, allImages);
+            // Apply current image detail style
+            setTimeout(() => {
+                applyImageDetailStyle();
+                window.collectionManager.updateCollectionSelect();
+            }, 100);
+        };
     </script>
 </body>
 </html>

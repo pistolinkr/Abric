@@ -1,6 +1,20 @@
 # Abric - Find Your Favorite Instantly
 
-A modern web application for discovering and managing your favorite items with Firebase authentication.
+A modern web application for discovering and managing your favorite items with Firebase authentication and Instagram image integration.
+
+## 🆕 New Features
+
+### Instagram Image Integration
+- **Safe Image Fetching**: Instagram oEmbed API를 통한 안전한 이미지 가져오기
+- **License Management**: 자동 라이선스 검증 및 저작자 표시 시스템
+- **Database Tracking**: 모든 이미지 사용 이력을 데이터베이스에 기록
+- **Commercial Use Protection**: 비즈니스 계정의 상업적 사용 제한
+
+### Gallery Booth with Instagram
+- **Real Content**: Picsum 대신 실제 Instagram 이미지 사용
+- **Attribution Display**: 이미지 하단에 저작자 정보 자동 표시
+- **License Badges**: 라이선스 타입 표시
+- **Hardware Acceleration**: 부드러운 스크롤링과 렌더링
 
 ## 🚀 Getting Started
 
@@ -8,6 +22,8 @@ A modern web application for discovering and managing your favorite items with F
 
 - Node.js (v16 or higher)
 - Firebase project with Authentication enabled
+- PostgreSQL (for image license management)
+- Instagram/Facebook Developer account (for Instagram API)
 
 ### Environment Setup
 
@@ -146,12 +162,56 @@ service cloud.firestore {
 }
 ```
 
+## 🖼️ Instagram Image Server
+
+### Quick Start
+```bash
+# 서버 시작
+./start-server.sh
+
+# 또는 수동으로
+cd server
+npm install
+cp .env.example .env
+# .env 파일을 실제 값으로 수정
+npm start
+```
+
+### 서버 설정
+1. **PostgreSQL 설치 및 설정**
+   ```bash
+   brew install postgresql
+   brew services start postgresql
+   createdb abric_images
+   psql abric_images < server/database/schema.sql
+   ```
+
+2. **Instagram API 설정**
+   - [Facebook Developers](https://developers.facebook.com/)에서 앱 생성
+   - Instagram Basic Display 제품 추가
+   - 앱 ID와 액세스 토큰을 `.env` 파일에 설정
+
+3. **환경 변수 설정**
+   ```bash
+   # server/.env
+   INSTAGRAM_APP_ID=your_app_id
+   INSTAGRAM_ACCESS_TOKEN=your_access_token
+   DB_HOST=localhost
+   DB_NAME=abric_images
+   ```
+
+### API 엔드포인트
+- `POST /api/images/fetch` - Instagram 이미지 메타데이터 가져오기
+- `GET /api/gallery/images` - 갤러리용 이미지들 조회
+- `POST /api/license/validate` - 라이선스 검증
+
 ## 🚀 Deployment
 
 1. **Build for production** (if using a bundler)
 2. **Set production environment variables**
 3. **Configure Firebase hosting** (optional)
-4. **Deploy to your preferred hosting service**
+4. **Deploy image server** (PostgreSQL + Node.js)
+5. **Deploy to your preferred hosting service**
 
 ## 📝 License
 

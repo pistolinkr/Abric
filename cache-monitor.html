@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cache Monitor - Abric</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a1a;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #444;
+        }
+        .stat-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #007AFF;
+        }
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 5px 0;
+            border-bottom: 1px solid #333;
+        }
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+        .stat-label {
+            color: #888;
+        }
+        .stat-value {
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .stat-value.success {
+            color: #4CAF50;
+        }
+        .stat-value.warning {
+            color: #FFC107;
+        }
+        .stat-value.error {
+            color: #F44336;
+        }
+        .button {
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+            transition: background 0.2s;
+        }
+        .button:hover {
+            background: #0056CC;
+        }
+        .button.danger {
+            background: #F44336;
+        }
+        .button.danger:hover {
+            background: #D32F2F;
+        }
+        .controls {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #007AFF;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .message {
+            background: #333;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .message.success {
+            background: #2E7D32;
+            color: #C8E6C9;
+        }
+        .message.error {
+            background: #C62828;
+            color: #FFCDD2;
+        }
+        .message.info {
+            background: #1565C0;
+            color: #BBDEFB;
+        }
+        .refresh-info {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Cache Monitor</h1>
+        
+        <div class="controls">
+            <button class="button" onclick="refreshStats()">🔄 새로고침</button>
+            <button class="button danger" onclick="clearCache()">🗑️ 캐시 초기화</button>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-title">Instagram API Cache</div>
+                <div id="instagramStats">
+                    <div class="loading"></div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-title">Database Cache</div>
+                <div id="databaseStats">
+                    <div class="loading"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="messages"></div>
+        
+        <div class="refresh-info">
+            자동 새로고침: 30초마다 | 마지막 업데이트: <span id="lastUpdate">-</span>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3001/api';
+        let refreshInterval;
+
+        // 페이지 로드 시 초기화
+        window.onload = function() {
+            refreshStats();
+            // 30초마다 자동 새로고침
+            refreshInterval = setInterval(refreshStats, 30000);
+        };
+
+        // 페이지 언로드 시 인터벌 정리
+        window.onbeforeunload = function() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+            }
+        };
+
+        // 캐시 통계 새로고침
+        async function refreshStats() {
+            try {
+                const response = await fetch(`${API_BASE}/cache/stats`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayStats(data);
+                    addMessage('캐시 통계가 업데이트되었습니다.', 'success');
+                } else {
+                    throw new Error(data.error || 'Failed to fetch cache stats');
+                }
+            } catch (error) {
+                console.error('Failed to refresh stats:', error);
+                addMessage(`통계 새로고침 실패: ${error.message}`, 'error');
+            }
+        }
+
+        // 통계 표시
+        function displayStats(data) {
+            // Instagram 캐시 통계
+            const instagramStats = data.instagram;
+            const instagramDiv = document.getElementById('instagramStats');
+            instagramDiv.innerHTML = `
+                <div class="stat-item">
+                    <span class="stat-label">총 항목</span>
+                    <span class="stat-value">${instagramStats.totalEntries}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">유효 항목</span>
+                    <span class="stat-value success">${instagramStats.validEntries}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">만료 항목</span>
+                    <span class="stat-value ${instagramStats.expiredEntries > 0 ? 'warning' : 'success'}">${instagramStats.expiredEntries}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">캐시 TTL</span>
+                    <span class="stat-value">${Math.round(instagramStats.cacheTimeout / 1000 / 60)}분</span>
+                </div>
+            `;
+
+            // 데이터베이스 캐시 통계
+            const databaseStats = data.database;
+            const databaseDiv = document.getElementById('databaseStats');
+            databaseDiv.innerHTML = `
+                <div class="stat-item">
+                    <span class="stat-label">총 항목</span>
+                    <span class="stat-value">${databaseStats.totalEntries}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">유효 항목</span>
+                    <span class="stat-value success">${databaseStats.validEntries}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">만료 항목</span>
+                    <span class="stat-value ${databaseStats.expiredEntries > 0 ? 'warning' : 'success'}">${databaseStats.expiredEntries}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">최대 크기</span>
+                    <span class="stat-value">${databaseStats.maxCacheSize}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">캐시 TTL</span>
+                    <span class="stat-value">${Math.round(databaseStats.cacheTimeout / 1000 / 60)}분</span>
+                </div>
+            `;
+
+            // 마지막 업데이트 시간
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+        }
+
+        // 캐시 초기화
+        async function clearCache() {
+            if (!confirm('모든 캐시를 초기화하시겠습니까?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/cache/clear`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    addMessage('모든 캐시가 초기화되었습니다.', 'success');
+                    // 통계 새로고침
+                    setTimeout(refreshStats, 1000);
+                } else {
+                    throw new Error(data.error || 'Failed to clear cache');
+                }
+            } catch (error) {
+                console.error('Failed to clear cache:', error);
+                addMessage(`캐시 초기화 실패: ${error.message}`, 'error');
+            }
+        }
+
+        // 메시지 추가
+        function addMessage(message, type = 'info') {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            
+            messagesDiv.insertBefore(messageDiv, messagesDiv.firstChild);
+            
+            // 최대 5개 메시지만 유지
+            while (messagesDiv.children.length > 5) {
+                messagesDiv.removeChild(messagesDiv.lastChild);
+            }
+        }
+    </script>
+</body>
+</html>

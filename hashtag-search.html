@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Hashtag Search - Abric</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a1a;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .search-section {
+            background: #2a2a2a;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            flex: 1;
+            background: #1a1a1a;
+            color: #ffffff;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 16px;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #007AFF;
+        }
+        .button {
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.2s;
+        }
+        .button:hover {
+            background: #0056CC;
+        }
+        .button:disabled {
+            background: #444;
+            cursor: not-allowed;
+        }
+        .hashtag-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .hashtag-tag {
+            background: #333;
+            color: #007AFF;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .hashtag-tag:hover {
+            background: #444;
+        }
+        .results {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .image-item {
+            background: #333;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .image-item:hover {
+            transform: scale(1.05);
+        }
+        .image-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .image-info {
+            padding: 10px;
+            font-size: 12px;
+        }
+        .warning {
+            background: #FF6B35;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .info {
+            background: #007AFF;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Instagram Hashtag Search</h1>
+        
+        <div class="warning">
+            <strong>⚠️ 중요:</strong> 이 도구는 공개 해시태그의 공개 포스트만 검색합니다. 개인정보 보호를 위해 모든 사용자의 이미지를 무단 수집하는 것은 불가능합니다.
+        </div>
+
+        <div class="search-section">
+            <h2>해시태그 검색</h2>
+            <div class="input-group">
+                <input type="text" id="hashtagInput" placeholder="#photography, #art, #design 등 해시태그 입력">
+                <button class="button" onclick="searchHashtag()">🔍 검색</button>
+            </div>
+            
+            <div class="hashtag-suggestions">
+                <div class="hashtag-tag" onclick="selectHashtag('#photography')">#photography</div>
+                <div class="hashtag-tag" onclick="selectHashtag('#art')">#art</div>
+                <div class="hashtag-tag" onclick="selectHashtag('#design')">#design</div>
+                <div class="hashtag-tag" onclick="selectHashtag('#nature')">#nature</div>
+                <div class="hashtag-tag" onclick="selectHashtag('#travel')">#travel</div>
+                <div class="hashtag-tag" onclick="selectHashtag('#food')">#food</div>
+                <div class="hashtag-tag" onclick="selectHashtag('#fashion')">#fashion</div>
+                <div class="hashtag-tag" onclick="selectHashtag('#architecture')">#architecture</div>
+            </div>
+        </div>
+
+        <div class="info">
+            <strong>💡 팁:</strong> 
+            <ul>
+                <li>공개 해시태그만 검색 가능합니다</li>
+                <li>비즈니스 계정의 공개 포스트가 우선 표시됩니다</li>
+                <li>크리에이터 계정의 공개 미디어를 찾을 수 있습니다</li>
+                <li>개인 계정의 포스트는 검색되지 않습니다</li>
+            </ul>
+        </div>
+
+        <div class="results" id="results" style="display: none;">
+            <h2>검색 결과</h2>
+            <div id="searchStats"></div>
+            <div class="image-grid" id="imageGrid"></div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="button" onclick="loadMoreResults()">더 보기</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentHashtag = '';
+        let currentPage = 0;
+        let allResults = [];
+
+        function selectHashtag(hashtag) {
+            document.getElementById('hashtagInput').value = hashtag;
+        }
+
+        async function searchHashtag() {
+            const hashtag = document.getElementById('hashtagInput').value.trim();
+            
+            if (!hashtag) {
+                alert('해시태그를 입력해주세요.');
+                return;
+            }
+
+            // # 제거
+            const cleanHashtag = hashtag.replace('#', '');
+            currentHashtag = cleanHashtag;
+            currentPage = 0;
+            allResults = [];
+
+            // 검색 시작
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('imageGrid').innerHTML = '<div style="text-align: center; padding: 40px;">검색 중...</div>';
+
+            try {
+                // 실제 Instagram API는 해시태그 검색을 지원하지 않음
+                // 대신 시뮬레이션된 결과를 표시
+                await simulateHashtagSearch(cleanHashtag);
+            } catch (error) {
+                console.error('Search error:', error);
+                document.getElementById('imageGrid').innerHTML = '<div style="text-align: center; padding: 40px; color: #FF6B35;">검색 중 오류가 발생했습니다.</div>';
+            }
+        }
+
+        async function simulateHashtagSearch(hashtag) {
+            // 실제로는 Instagram의 공개 API나 웹 스크래핑이 필요
+            // 여기서는 시뮬레이션된 결과를 표시
+            
+            const mockResults = [
+                {
+                    id: 1,
+                    url: 'https://www.instagram.com/p/ABC123/',
+                    thumbnail: 'data:image/svg+xml;base64,' + btoa(`
+                        <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="200" height="200" fill="#333"/>
+                            <text x="100" y="100" text-anchor="middle" fill="#007AFF" font-size="14">#${hashtag}</text>
+                            <text x="100" y="120" text-anchor="middle" fill="#888" font-size="12">Sample Post 1</text>
+                        </svg>
+                    `),
+                    author: 'photographer_user',
+                    likes: 1234
+                },
+                {
+                    id: 2,
+                    url: 'https://www.instagram.com/p/DEF456/',
+                    thumbnail: 'data:image/svg+xml;base64,' + btoa(`
+                        <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="200" height="200" fill="#333"/>
+                            <text x="100" y="100" text-anchor="middle" fill="#007AFF" font-size="14">#${hashtag}</text>
+                            <text x="100" y="120" text-anchor="middle" fill="#888" font-size="12">Sample Post 2</text>
+                        </svg>
+                    `),
+                    author: 'artist_user',
+                    likes: 567
+                },
+                {
+                    id: 3,
+                    url: 'https://www.instagram.com/p/GHI789/',
+                    thumbnail: 'data:image/svg+xml;base64,' + btoa(`
+                        <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="200" height="200" fill="#333"/>
+                            <text x="100" y="100" text-anchor="middle" fill="#007AFF" font-size="14">#${hashtag}</text>
+                            <text x="100" y="120" text-anchor="middle" fill="#888" font-size="12">Sample Post 3</text>
+                        </svg>
+                    `),
+                    author: 'designer_user',
+                    likes: 890
+                }
+            ];
+
+            allResults = mockResults;
+            displayResults();
+        }
+
+        function displayResults() {
+            const imageGrid = document.getElementById('imageGrid');
+            const searchStats = document.getElementById('searchStats');
+            
+            searchStats.innerHTML = `
+                <div style="background: #333; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <strong>#${currentHashtag}</strong> 검색 결과: ${allResults.length}개 포스트
+                </div>
+            `;
+
+            imageGrid.innerHTML = '';
+            
+            allResults.forEach(post => {
+                const item = document.createElement('div');
+                item.className = 'image-item';
+                item.innerHTML = `
+                    <img src="${post.thumbnail}" alt="Instagram Post">
+                    <div class="image-info">
+                        <div><strong>@${post.author}</strong></div>
+                        <div>❤️ ${post.likes} likes</div>
+                        <div style="margin-top: 5px;">
+                            <button class="button" onclick="addToBatch('${post.url}')" style="font-size: 12px; padding: 5px 10px;">
+                                배치에 추가
+                            </button>
+                        </div>
+                    </div>
+                `;
+                imageGrid.appendChild(item);
+            });
+        }
+
+        function addToBatch(url) {
+            // 배치 업로드 페이지로 이동하여 URL 추가
+            const batchUrl = `../batch-upload.html?url=${encodeURIComponent(url)}`;
+            window.open(batchUrl, '_blank');
+        }
+
+        function loadMoreResults() {
+            // 더 많은 결과 로드 (시뮬레이션)
+            alert('더 많은 결과를 로드하려면 실제 Instagram API 연동이 필요합니다.');
+        }
+
+        // URL 파라미터에서 해시태그 자동 로드
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const hashtag = urlParams.get('hashtag');
+            if (hashtag) {
+                document.getElementById('hashtagInput').value = '#' + hashtag;
+                searchHashtag();
+            }
+        };
+    </script>
+</body>
+</html>
